@@ -4,41 +4,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio</title>
+    <title>Pratyush Chauhan | Developer Portfolio</title>
+    <!-- Modern Typography: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./favicon.png">
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Pratyush Chauhan | Software Engineer & AI Specialist">
+    <meta name="description"
+        content="Portfolio of Pratyush Chauhan, a Software Engineer specializing in RAG, LLMs, and building intelligent AI agents.">
+    <meta name="keywords"
+        content="Pratyush Chauhan, Software Engineer, RAG, Retrieval Augmented Generation, LLM, Large Language Models, Generative AI, AI Agents, Python, Flutter, Full-stack Developer">
+    <meta name="author" content="Pratyush Chauhan">
+    <link rel="canonical" href="https://pratyushchauhan.github.io/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pratyushchauhan.github.io/">
+    <meta property="og:title" content="Pratyush Chauhan | Software Engineer & AI Specialist">
+    <meta property="og:description"
+        content="Building the future with RAG, LLMs, and intelligent agents. Check out my latest AI projects.">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/109033080?v=4">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://pratyushchauhan.github.io/">
+    <meta property="twitter:title" content="Pratyush Chauhan | Software Engineer & AI Specialist">
+    <meta property="twitter:description"
+        content="Building the future with RAG, LLMs, and intelligent agents. Check out my latest AI projects.">
+    <meta property="twitter:image" content="https://avatars.githubusercontent.com/u/109033080?v=4">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Pratyush Chauhan",
+      "url": "https://pratyushchauhan.github.io/",
+      "image": "https://avatars.githubusercontent.com/u/109033080?v=4",
+      "sameAs": [
+        "https://github.com/pratyushchauhan",
+        "https://www.linkedin.com/in/pratyush-chauhan-14029421b/"
+      ],
+      "jobTitle": "Software Engineer",
+      "description": "Software Engineer specializing in Retrieval Augmented Generation (RAG), Large Language Models, and building intelligent agents.",
+      "knowsAbout": ["Generative AI", "RAG", "LLM", "Python", "Flutter", "WebSockets"]
+    }
+    </script>
+
     <style>
+        :root {
+            --bg-color: #050505;
+            --accent-color: #00f2fe;
+            --accent-secondary: #4facfe;
+            --text-main: #f8f9fa;
+            --text-dim: #a0a0a0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(255, 255, 255, 0.1);
+            --font-main: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(79, 172, 254, 0.05) 0%, transparent 20%);
+            z-index: -1;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: rgba(5, 5, 5, 0.8) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.25rem 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main) !important;
+            letter-spacing: -0.03em;
+        }
+
+        .nav-link {
+            color: var(--text-dim) !important;
+            font-weight: 500;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
         .hero-section {
-            padding: 100px 0;
-            background-color: #f8f9fa;
+            padding: 180px 0 100px;
+            position: relative;
         }
 
-        .project-card {
-            transition: transform 0.3s ease;
+        .profile-img-container {
+            position: relative;
+            display: inline-block;
         }
 
-        .project-card:hover {
-            transform: translateY(-5px);
+        .profile-img-container::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .profile-img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border: 4px solid var(--bg-color);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 800;
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #ffffff 30%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-lead {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-modern {
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary-modern {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 242, 254, 0.3);
+            color: #000;
+        }
+
+        .btn-outline-modern {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+        }
+
+        .btn-outline-modern:hover {
+            background: var(--glass-bg);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* Social Links */
+        .social-links {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
         }
 
         .social-links a {
-            color: #212529;
-            margin: 0 10px;
-            font-size: 1.5rem;
-            transition: color 0.3s ease;
+            color: var(--text-dim);
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            background: var(--glass-bg);
         }
 
         .social-links a:hover {
-            color: #0d6efd;
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* Projects Cards */
+        #projects {
+            padding: 100px 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .section-title {
+            text-align: center;
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            letter-spacing: -0.02em;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-color);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-img-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-img {
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-card:hover .project-img {
+            transform: scale(1.1);
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .project-text {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-section {
+                text-align: center;
+                padding: 140px 0 80px;
+            }
+
+            .hero-lead {
+                margin: 0 auto 40px;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-modern {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Portfolio</a>
+            <a class="navbar-brand" href="#">P. CHAUHAN</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -54,6 +387,10 @@
                         <a class="nav-link" href="https://docs.google.com/document/d/1ScESLbaHCVIhBrWAUD98pzX8L20hg-3P/"
                             target="_blank">Resume</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link highlight" href="https://calendar.app.google/sVBFoX6s7eFPxdEUA"
+                            target="_blank">Book a Meeting</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -63,23 +400,38 @@
     <section id="home" class="hero-section">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-4 text-center">
-                    <img src="https://avatars.githubusercontent.com/u/109033080?v=4" alt="Profile Picture"
-                        class="img-fluid rounded-circle mb-4">
+                <div class="col-md-5 text-center order-md-2 mb-5 mb-md-0">
+                    <div class="profile-img-container reveal">
+                        <img src="https://avatars.githubusercontent.com/u/109033080?v=4" alt="Pratyush Chauhan"
+                            class="img-fluid rounded-circle profile-img">
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <h1 class="display-4 mb-4">Hello, I'm Pratyush Chauhan</h1>
-                    <p class="lead mb-4">Recent Graduate, enthusiastic and hardworking. I am currently learning more
-                        about retrieval augmented generation, large language models, vector stores and vector databases.
-                        In my free time, I contribute to open source & and make both frontend (Flutter) and backend (RAG
-                        LLM, WebSockets, python) applications.
+                <div class="col-md-7 order-md-1">
+                    <h1 class="hero-title reveal" style="transition-delay: 0.1s;">Hello, I'm <br><span
+                            style="background: linear-gradient(90deg, #00f2fe, #4facfe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Pratyush
+                            Chauhan</span></h1>
+                    <p class="hero-lead reveal" style="transition-delay: 0.2s;">
+                        I'm a Software Engineer passionate about Retrieval Augmented Generation (RAG), Large Language
+                        Models, and building intelligent agents. I move fast and create products using the very
+                        cutting-edge of AI
+                        technology.
                     </p>
-                    <div class="social-links">
-                        <a href="https://github.com/pratyushchauhan" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/pratyush-chauhan-14029421b/" target="_blank"><i
-                                class="fab fa-linkedin"></i></a>
-                        <a href="https://docs.google.com/document/d/1ScESLbaHCVIhBrWAUD98pzX8L20hg-3P/"
-                            target="_blank"><i class="fa fa-file-lines"></i></a>
+                    <div class="cta-group reveal" style="transition-delay: 0.3s;">
+                        <a href="https://calendar.app.google/sVBFoX6s7eFPxdEUA" target="_blank"
+                            class="btn-modern btn-primary-modern">
+                            <i class="fas fa-calendar-alt"></i> Book a Meeting
+                        </a>
+                        <a href="#projects" class="btn-modern btn-outline-modern">
+                            View Work
+                        </a>
+                    </div>
+                    <div class="social-links reveal" style="transition-delay: 0.4s;">
+                        <a href="https://github.com/pratyushchauhan" target="_blank" title="GitHub"
+                            aria-label="GitHub Profile"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/pratyush-chauhan-14029421b/" target="_blank"
+                            title="LinkedIn" aria-label="LinkedIn Profile"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://docs.google.com/document/d/1ScESLbaHCVIhBrWAUD98pzX8L20hg-3P/" target="_blank"
+                            title="Resume" aria-label="View Resume"><i class="fa fa-file-lines"></i></a>
                     </div>
                 </div>
             </div>
@@ -87,42 +439,95 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-5">
+    <section id="projects">
         <div class="container">
-            <h2 class="text-center mb-5">My Projects</h2>
+            <h2 class="section-title reveal">Featured Projects</h2>
             <div class="row g-4">
-                <!-- Project 1 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card h-100">
-                        <div class="ratio ratio-16x9">
-                            <img src="./criticAI.png" class="card-img-top object-fit:cover" alt="Critic AI">
+                <!-- Vinci Project -->
+                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.1s;">
+                    <div class="card project-card">
+                        <div class="project-img-wrapper">
+                            <div class="ratio ratio-16x9">
+                                <img src="./vinci.png" class="card-img-top object-fit-cover project-img" alt="Vinci AI">
+                            </div>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Critic AI</h5>
-                            <p class="card-text">A game review generator using Generative AI.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="https://www.youtube.com/watch?v=j67vs5kmeQA" class="btn btn-primary">View
-                                    Demo</a>
-                                <a href="https://github.com/Critic-Ai" class="btn btn-outline-secondary">GitHub</a>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="project-title mb-0">Vinci</h5>
+                                <span class="badge rounded-pill"
+                                    style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color);">AI
+                                    Agency</span>
+                            </div>
+                            <p class="project-text">An AI-driven 'Superagency' that automates high-end video production
+                                by utilizing a team of virtual Creative Agents (Director, Designer, Cinematographer) to
+                                deliver brand-perfect assets in minutes.</p>
+                            <div class="d-flex gap-3">
+                                <a href="https://tryvinci.com/" target="_blank"
+                                    class="btn-modern btn-primary-modern py-2 px-4" style="font-size: 0.9rem;">
+                                    Live Site <i class="fas fa-external-link-alt ms-2"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Project 2 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card project-card h-100">
-                        <div class="ratio ratio-16x9">
-                            <img class="card-img-top object-fit:cover"
-                                src="https://play-lh.googleusercontent.com/mYJpetSOIDEC6GxYzIqDD3lX0_qACx-8yMjFBfeNz7hUn-110L4q1m1oWC3YZHp6HQ=w480-h960-rw"
-                                title="Project Demo" allowfullscreen>
+                <!-- Critic AI -->
+                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.2s;">
+                    <div class="card project-card">
+                        <div class="project-img-wrapper">
+                            <div class="ratio ratio-16x9">
+                                <img src="./criticAI.png" class="card-img-top object-fit-cover project-img"
+                                    alt="Critic AI">
+                            </div>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">TAWX</h5>
-                            <p class="card-text"> A social media app built with Flutter for a client.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <a href="https://play.google.com/store/apps/details?id=com.tawx.android&hl=en_US"
-                                    class="btn btn-primary">Play Store</a>
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="project-title mb-0">Critic AI</h5>
+                                <span class="badge rounded-pill"
+                                    style="background: rgba(255, 255, 255, 0.1); color: var(--text-dim); border: 1px solid var(--glass-border);">Gen
+                                    AI</span>
+                            </div>
+                            <p class="project-text">A comprehensive game review generator leveraging advanced Generative
+                                AI architectures to provide nuanced, detailed critiques of modern video games.</p>
+                            <div class="d-flex gap-3">
+                                <a href="https://www.youtube.com/watch?v=j67vs5kmeQA" target="_blank"
+                                    class="btn-modern btn-outline-modern py-2 px-4" style="font-size: 0.9rem;">
+                                    Watch Demo
+                                </a>
+                                <a href="https://github.com/Critic-Ai" target="_blank"
+                                    class="btn-modern btn-outline-modern py-2 px-4"
+                                    style="font-size: 0.9rem; border-color: rgba(255,255,255,0.1);">
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAWX -->
+                <div class="col-md-12 reveal" style="transition-delay: 0.3s;">
+                    <div class="card project-card">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <div class="project-img-wrapper" style="height: 100%;">
+                                    <img src="https://play-lh.googleusercontent.com/mYJpetSOIDEC6GxYzIqDD3lX0_qACx-8yMjFBfeNz7hUn-110L4q1m1oWC3YZHp6HQ=w480-h960-rw"
+                                        class="img-fluid rounded-start project-img" alt="TAWX"
+                                        style="height: 100%; width: 100%; object-fit: cover; min-height: 300px;">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body d-flex flex-column justify-content-center h-100">
+                                    <h5 class="project-title">TAWX</h5>
+                                    <p class="project-text">A specialized social media application built with Flutter
+                                        tailored for high-engagement community interactions. Designed and deployed for a
+                                        global client with scalability and performance as core priorities.</p>
+                                    <div class="d-flex gap-3">
+                                        <a href="https://play.google.com/store/apps/details?id=com.tawx.android&hl=en_US"
+                                            target="_blank" class="btn-modern btn-outline-modern py-2 px-4">
+                                            Play Store <i class="fab fa-google-play ms-2"></i>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -131,13 +536,32 @@
         </div>
     </section>
 
-    <footer class="bg-light py-4">
+    <!-- Footer -->
+    <footer class="py-5" style="border-top: 1px solid var(--glass-border);">
         <div class="container text-center">
-            <p>© 2025 Pratyush Chauhan. All rights reserved.</p>
+            <p style="color: var(--text-dim);">© 2025 Pratyush Chauhan.</p>
         </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple reveal animation on scroll
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", reveal);
+        // Initial check
+        window.addEventListener("load", reveal);
+    </script>
 </body>
 
 </html>
