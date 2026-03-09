@@ -71,6 +71,22 @@
             --font-main: 'Outfit', sans-serif;
         }
 
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-card .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card .project-text {
+            flex-grow: 1;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -444,8 +460,36 @@
         <div class="container">
             <h2 class="section-title reveal">Featured Projects</h2>
             <div class="row g-4">
-                <!-- Vinci Project -->
+                <!-- Engram Project -->
                 <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.1s;">
+                    <div class="card project-card">
+                        <div class="project-img-wrapper">
+                            <div class="ratio ratio-16x9">
+                                <img src="./engram.png" class="card-img-top object-fit-cover project-img"
+                                    alt="Engram AI">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="project-title mb-0">Engram</h5>
+                                <span class="badge rounded-pill"
+                                    style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color);">Brand
+                                    Brain</span>
+                            </div>
+                            <p class="project-text">A centralized intelligence system that encodes a company's
+                                positioning logic and decision-making 'brain', ensuring team alignment through automated
+                                category evaluation and market signal processing.</p>
+                            <div class="d-flex gap-3">
+                                <a href="https://engramhq.com/" target="_blank"
+                                    class="btn-modern btn-primary-modern py-2 px-4" style="font-size: 0.9rem;">
+                                    Live Site <i class="fas fa-external-link-alt ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Vinci Project -->
+                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.2s;">
                     <div class="card project-card">
                         <div class="project-img-wrapper">
                             <div class="ratio ratio-16x9">
@@ -473,7 +517,7 @@
                 </div>
 
                 <!-- Critic AI -->
-                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.2s;">
+                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.3s;">
                     <div class="card project-card">
                         <div class="project-img-wrapper">
                             <div class="ratio ratio-16x9">
@@ -506,29 +550,31 @@
                 </div>
 
                 <!-- TAWX -->
-                <div class="col-md-12 reveal" style="transition-delay: 0.3s;">
+                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.4s;">
                     <div class="card project-card">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <div class="project-img-wrapper" style="height: 100%;">
-                                    <img src="https://play-lh.googleusercontent.com/mYJpetSOIDEC6GxYzIqDD3lX0_qACx-8yMjFBfeNz7hUn-110L4q1m1oWC3YZHp6HQ=w480-h960-rw"
-                                        class="img-fluid rounded-start project-img" alt="TAWX"
-                                        style="height: 100%; width: 100%; object-fit: cover; min-height: 300px;">
-                                </div>
+                        <div class="project-img-wrapper">
+                            <div class="ratio ratio-16x9">
+                                <img src="https://play-lh.googleusercontent.com/mYJpetSOIDEC6GxYzIqDD3lX0_qACx-8yMjFBfeNz7hUn-110L4q1m1oWC3YZHp6HQ=w480-h960-rw"
+                                    class="card-img-top object-fit-cover project-img" alt="TAWX">
                             </div>
-                            <div class="col-md-8">
-                                <div class="card-body d-flex flex-column justify-content-center h-100">
-                                    <h5 class="project-title">TAWX</h5>
-                                    <p class="project-text">A specialized social media application built with Flutter
-                                        tailored for high-engagement community interactions. Designed and deployed for a
-                                        global client with scalability and performance as core priorities.</p>
-                                    <div class="d-flex gap-3">
-                                        <a href="https://play.google.com/store/apps/details?id=com.tawx.android&hl=en_US"
-                                            target="_blank" class="btn-modern btn-outline-modern py-2 px-4">
-                                            Play Store <i class="fab fa-google-play ms-2"></i>
-                                        </a>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="project-title mb-0">TAWX</h5>
+                                <span class="badge rounded-pill"
+                                    style="background: rgba(255, 255, 255, 0.1); color: var(--text-dim); border: 1px solid var(--glass-border);">Mobile
+                                    App</span>
+                            </div>
+                            <p class="project-text">A specialized social media application built with Flutter tailored
+                                for
+                                high-engagement community interactions. Designed and deployed for a global client with
+                                performance as core priorities.</p>
+                            <div class="d-flex gap-3">
+                                <a href="https://play.google.com/store/apps/details?id=com.tawx.android&hl=en_US"
+                                    target="_blank" class="btn-modern btn-outline-modern py-2 px-4"
+                                    style="font-size: 0.9rem;">
+                                    Play Store <i class="fab fa-google-play ms-2"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
