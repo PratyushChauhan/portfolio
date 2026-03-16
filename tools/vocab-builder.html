@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vocab Builder — Uncomplicated Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0c0e18;--surface:#111420;--card:#161928;--border:#1e2540;
+  --text:#dde3f0;--muted:#4e5a7a;--dim:#8892ac;
+  --known:#22c55e;--known-bg:rgba(34,197,94,.1);--known-border:rgba(34,197,94,.35);
+  --forgot:#f43f5e;--forgot-bg:rgba(244,63,94,.1);--forgot-border:rgba(244,63,94,.35);
+  --accent:#e8c547;--accent-bg:rgba(232,197,71,.12);--accent-border:rgba(232,197,71,.35);
+}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100dvh;display:flex;flex-direction:column}
+
+/* ── Header ── */
+header{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:10;gap:1rem}
+.logo{font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.logo b{color:var(--accent)}
+.header-right{display:flex;align-items:center;gap:.625rem}
+select{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:.5rem;padding:.35rem .7rem;font-family:inherit;font-size:.8125rem;cursor:pointer;outline:none;transition:border-color .15s}
+select:focus,select:hover{border-color:var(--accent)}
+.btn-sm{background:var(--card);color:var(--dim);border:1px solid var(--border);border-radius:.5rem;padding:.35rem .7rem;font-family:inherit;font-size:.8125rem;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn-sm:hover{color:var(--text);border-color:var(--dim)}
+.btn-sm.active{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+
+/* ── Stats bar ── */
+.statsbar{display:flex;align-items:center;gap:.875rem;padding:.5rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border);font-size:.75rem;color:var(--dim)}
+.stat{display:flex;align-items:center;gap:.35rem}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot-k{background:var(--known)}.dot-f{background:var(--forgot)}.dot-u{background:var(--muted)}
+.progress-wrap{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden;display:flex;min-width:60px}
+.prog-k{background:var(--known);transition:width .3s}
+.prog-f{background:var(--forgot);transition:width .3s}
+.kb-hints{display:flex;align-items:center;gap:.625rem;margin-left:auto;flex-wrap:wrap}
+.kh{display:flex;align-items:center;gap:.2rem;color:var(--muted);font-size:.7rem;white-space:nowrap}
+
+kbd{background:var(--border);border-radius:.25rem;padding:.1em .4em;font-family:inherit;font-size:.85em}
+
+/* ── Word strip ── */
+.word-strip{display:flex;align-items:center;gap:1rem;padding:.6rem 1.25rem;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.word-strip.s-known{background:var(--known-bg);border-bottom-color:var(--known-border)}
+.word-strip.s-forgot{background:var(--forgot-bg);border-bottom-color:var(--forgot-border)}
+.ws-word{font-size:1.625rem;font-weight:700;letter-spacing:-.02em;line-height:1}
+.ws-meta{display:flex;flex-direction:column;gap:.1rem;flex:1}
+.ws-group{font-size:.7rem;color:var(--muted)}
+.ws-phonetic{font-size:.8125rem;color:var(--muted)}
+.ws-badge{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.ws-badge.s-known{color:var(--known)}.ws-badge.s-forgot{color:var(--forgot)}
+.ws-btns{display:flex;align-items:center;gap:.5rem;margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .875rem;border:1px solid var(--border);border-radius:.625rem;background:var(--card);color:var(--text);font-family:inherit;font-size:.8rem;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap}
+.btn:hover{border-color:var(--dim)}
+.btn kbd{color:var(--muted)}
+.btn-k{border-color:var(--known-border);color:var(--known)}.btn-k:hover{background:var(--known-bg)}
+.btn-f{border-color:var(--forgot-border);color:var(--forgot)}.btn-f:hover{background:var(--forgot-bg)}
+.ws-ctr{font-size:.8rem;color:var(--muted);min-width:3.5rem;text-align:center}
+
+/* ── Definition modal ── */
+.def-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center;padding:1.5rem}
+.def-overlay.visible{display:flex}
+.def-card{background:var(--card);border:1px solid var(--border);border-radius:1rem;padding:1.5rem 1.75rem;max-width:520px;width:100%;max-height:80dvh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.6);position:relative}
+.def-card-hd{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+.def-card-word{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+.def-card-ph{font-size:.85rem;color:var(--muted)}
+.def-close{background:none;border:none;color:var(--muted);font-size:1.25rem;cursor:pointer;line-height:1;padding:.25rem;margin-left:auto}
+.def-close:hover{color:var(--text)}
+.def-loading,.def-error{color:var(--muted);font-size:.875rem}
+.def-entry+.def-entry{margin-top:.875rem;padding-top:.875rem;border-top:1px solid var(--border)}
+.pos-tag{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
+.def-text{font-size:.9rem;color:var(--dim);line-height:1.6}
+.def-ex{font-size:.825rem;color:var(--muted);font-style:italic;margin-top:.2rem}
+
+/* ── Word Table ── */
+.word-table{border-top:1px solid var(--border);background:var(--surface)}
+.table-hd{display:flex;align-items:center;gap:.75rem;padding:.6rem 1.25rem;border-bottom:1px solid var(--border)}
+.table-tabs{display:flex;gap:.25rem}
+.tab{background:transparent;border:1px solid var(--border);border-radius:.4rem;padding:.3rem .75rem;font-family:inherit;font-size:.775rem;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--text);border-color:var(--dim)}
+.tab.active{background:var(--accent-bg);border-color:var(--accent-border);color:var(--accent)}
+/* current-group chip view */
+.chip-body{display:flex;flex-wrap:wrap;gap:.3rem;padding:.875rem 1.25rem}
+.chip{padding:.2rem .55rem;border-radius:.35rem;font-size:.75rem;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .1s;background:transparent;font-family:inherit}
+.chip:hover{border-color:var(--dim);color:var(--text)}
+.chip.cur{border-color:var(--accent-border);color:var(--accent);background:var(--accent-bg)}
+.chip.s-known{border-color:var(--known-border);color:var(--known);background:var(--known-bg)}
+.chip.s-forgot{border-color:var(--forgot-border);color:var(--forgot);background:var(--forgot-bg)}
+/* all-groups table view */
+.group-section{border-bottom:1px solid var(--border)}
+.section-lbl{padding:.4rem 1.25rem;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border)}
+.group-row{display:grid;grid-template-columns:repeat(8,1fr)}
+.group-col{border-right:1px solid var(--border)}
+.group-col:last-child{border-right:none}
+.gcol-hd{padding:.45rem .5rem;font-size:.7rem;font-weight:700;letter-spacing:.04em;color:var(--dim);border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:1}
+.gword{padding:.3rem .5rem;font-size:.75rem;cursor:pointer;color:var(--muted);border-left:2px solid transparent;transition:background .1s,color .1s;line-height:1.4}
+.gword:hover{background:rgba(255,255,255,.03);color:var(--text)}
+.gword.cur{border-left-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.gword.s-known{color:var(--known)}
+.gword.s-forgot{color:var(--forgot)}
+@media(max-width:900px){.group-row{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:500px){.group-row{grid-template-columns:repeat(2,1fr)}}
+
+@media(max-width:520px){
+  .btn{padding:.5rem .625rem;font-size:.75rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Uncomplicated <b>Tools</b> · Vocab Builder</div>
+  <div class="header-right">
+    <select id="gpick" onchange="gotoGroup(+this.value)"></select>
+    <button class="btn-sm" id="shuf-btn" onclick="cycleShuffle()">&#8651; Shuffle</button>
+    <button class="btn-sm" onclick="resetGroup()">Reset</button>
+  </div>
+</header>
+
+<div class="statsbar" id="stats"></div>
+
+<div class="word-strip" id="word-strip">
+  <div class="ws-meta">
+    <span class="ws-group" id="cpos"></span>
+    <span class="ws-word" id="word"></span>
+    <span class="ws-phonetic" id="phonetic"></span>
+  </div>
+  <span class="ws-badge" id="cbadge"></span>
+  <div class="ws-btns">
+    <button class="btn btn-f" onclick="mark('forgot')">&#10007; Forgot <kbd>R</kbd></button>
+    <span class="ws-ctr" id="wctr"></span>
+    <button class="btn btn-k" onclick="mark('known')">&#10003; Knew it <kbd>G</kbd></button>
+    <button class="btn" onclick="toggleDef()"><kbd>Space</kbd> definition</button>
+  </div>
+</div>
+<div class="def-overlay" id="defoverlay" onclick="closeDef(event)">
+  <div class="def-card" id="defpanel">
+    <div class="def-card-hd">
+      <div><div class="def-card-word" id="def-word"></div><div class="def-card-ph" id="def-ph"></div></div>
+      <button class="def-close" onclick="toggleDef()">&#x2715;</button>
+    </div>
+    <div id="def-body"></div>
+  </div>
+</div>
+
+<div class="word-table">
+  <div class="table-hd">
+    <div class="table-tabs">
+      <button class="tab" id="tab-group" onclick="setOvMode('group')">Current Group</button>
+      <button class="tab active" id="tab-all" onclick="setOvMode('all')">All Groups</button>
+    </div>
+  </div>
+  <div id="ovbody"></div>
+</div>
+
+<script>
+const GROUPS = [
+  ['abound','amorphous','austere','belie','capricious','cerebral','congenial','conspicuous','cursory','daunting','deify','didactic','disseminate','feasible','flout','homogeneous','humdrum','insipid','loquacious','misanthropic','misnomer','negligent','obsequious','placate','proclivity','puerile','quixotic','spendthrift','taciturn','wary'],
+  ['adulterate','advocate','aggrandize','alacrity','ambivalent','ameliorate','amenable','anachronistic','audacious','avaricious','banal','benign','brazen','calumny','candid','castigate','caustic','construe','contrite','convoluted','covet','craven','decorum','deft','demur','derivative','desiccate','diatribe','incredulous','ingenuous'],
+  ['abate','abjure','anomalous','antipathy','arcane','arduous','artless','ascetic','assuage','betray','bucolic','burgeon','cacophonous','canonize','censure','chicanery','coalesce','cogent','compelling','contend','copious','cosmopolitan','deference','desultory','diffident','dilatory','equivocate','polarize','prodigal','verbose'],
+  ['abstain','approbation','cherish','corroborate','disparate','emulate','enervate','ephemeral','fervid','garrulous','incendiary','inimical','intimate','invigorate','mitigate','obsolete','opaque','paradigmatic','pedantic','placid','polemical','precipitate','profundity','prophetic','prudent','punctilious','recondite','scrupulous','tranquil','vacillate'],
+  ['aloof','clangor','conventional','debunk','diminutive','discernible','enigmatic','estranged','extravagant','fanciful','frivolous','heterogeneous','imperious','impertinent','invasive','irresolute','laudable','lax','marginalize','panache','plodding','prosaic','remedial','restive','sporadic','stigmatize','undermine','utterly','weary','zealous'],
+  ['admonish','aesthetic','affectation','alleviate','analogous','bolster','chauvinistic','connoisseur','dissemble','dogged','dupe','empirical','engender','entitled','pertinacious','presumptuous','probity','proliferate','specious','spurious','subjective','subvert','timorous','tortuous','tractable','transient','ubiquitous','underscore','venal','venerate'],
+  ['appease','arbitrary','archaic','clamorous','dearth','explicable','hyperbole','immutable','indefatigable','indolent','insular','intransigent','intrepid','irreverent','loathe','malign','malleable','neophyte','plastic','platitude','prescient','pristine','reproach','robust','salubrious','sanction','sedulous','soporific','stern','tendentious'],
+  ['accentuate','conjectural','convivial','decadent','egregious','evanescent','flamboyant','forestall','gainsay','galvanize','indiscriminate','innocuous','momentary','mundane','nettlesome','nullify','obviate','omnipresent','oust','palpable','perfidy','profuse','pugnacious','sagacious','sanguine','scant','skullduggery','trivial','utilitarian','vapid'],
+  ['boorish','brook','circumspect','comity','commensurate','cordial','deleterious','dichotomy','edify','elicit','erudite','fecund','feeble','felicitous','forbear','haphazard','hodgepodge','impede','impetuous','irascible','mercenary','meticulous','mordant','outstrip','precarious','quirky','repudiate','tact','trifling','turbulent'],
+  ['acumen','antithesis','ascribe','befuddled','eschew','esoteric','evasive','exculpate','expedite','fastidious','feign','furtive','hamper','indispensable','lament','myopic','nonchalant','partial','pensive','portend','provincial','rudimentary','salutary','sever','slight','somnolent','stoic','supersede','tout','wane'],
+  ['abhor','boisterous','chivalrous','churlish','clandestine','complacent','cumbersome','debilitating','deliberate','droll','eccentric','fractious','limpid','mawkish','obeisance','ostentatious','panacea','perfunctory','perilous','pervasive','preclude','predilection','rapacious','relish','satirical','sham','skirt','sluggish','spartan','truculent'],
+  ['acrimonious','belligerent','beneficent','canny','cavalier','distressed','dwindling','eclipse','encyclopedic','exacerbate','exasperated','fungible','hackneyed','incongruous','interchangeable','laconic','lucrative','magisterial','onerous','opprobrium','parsimonious','peripheral','provocative','renounce','tempestuous','tenable','transgression','urbane','verisimilitude','vitiate'],
+  ['affinity','altruistic','baroque','byzantine','compromise','conciliatory','countenance','covert','credible','diffuse','documentary','exhaustive','exhilarating','extraneous','fervor','futile','illusory','invidious','lethargic','metaphorical','mimic','numinous','obscure','overt','pellucid','perpetuate','rational','scathing','subtle','superficial'],
+  ['acquiesce','adroit','amend','animus','apologist','astringent','collaborate','competent','correlate','deride','dictate','discreet','divorced','elitist','exacting','flummoxed','fruitful','inborn','polymath','reticent','stringent','subservient','surreptitious','tantalizing','tantamount','torpor','trenchant','umbrage','versatile','wayward'],
+  ['alienate','apathy','apropos','apt','cloak','consensus','distort','divergent','elated','enchant','entrenched','exotic','exploitative','foreseeable','forsake','gratify','heed','judicious','lucid','pertinent','propriety','scintillating','sensational','sophisticated','strife','understated','unscrupulous','veracity','virulent','volatile'],
+  ['antedate','banish','bridle','comply','crestfallen','curtail','elucidate','evade','feckless','fester','iconoclastic','immure','improvise','inhibit','inscrutable','lionize','monotonous','peculiar','premeditate','profligate','reconcile','refine','relinquish','ruminate','skittish','superfluous','synoptic','thorough','visionary','vociferous'],
+  ['acclaim','ascertain','assertive','bogus','cataclysmic','circumscribe','complementary','contentious','disingenuous','divulge','dogmatic','fallacious','foolhardy','hinder','impair','impugn','incessant','inclined','inveterate','miserly','patent','petulant','pithy','pliant','sanctimonious','sound','tarnish','tepid','upbraid','vexation'],
+  ['abet','accessible','acquisitive','amalgamate','attenuate','augment','aversion','blithe','contempt','dawdle','deflect','discount','dissident','efficacious','equitable','erratic','industrious','inform','irksome','manacle','modest','noxious','pernicious','predicament','proficient','prolix','scorn','subordinate','unseemly','veritable'],
+  ['acolyte','anoint','base','coercion','coin','cunning','discomfit','dissent','distill','dubious','ebullient','facetious','fallible','florid','gawky','inveigle','jettison','mendacity','munificent','naive','noble','parochial','pedestrian','prevaricate','prime','radical','recrudescent','temporal','transitory','viable'],
+  ['abreast','confound','digression','discrepancy','duplicitous','expedient','fabricate','glum','harbinger','intrinsic','largesse','libertine','malfeasance','manifest','minute','modish','nascent','perennial','pious','providential','prowess','schism','slander','stalwart','supplicate','terse','tirade','universal','vanquish','woeful'],
+  ['abject','amicable','animosity','aver','barrage','cathartic','decipher','delusion','dispense','eloquent','enthrall','eradicate','fledgling','fortitude','fortuitous','goad','imminent','incontrovertible','itinerant','magnanimous','meritorious','mutiny','paradoxical','perseverance','render','repertoire','resilient','resolute','supple','valor'],
+  ['arresting','chastise','cumbersome','economy','elementary','embellish','euphoric','exonerate','extrapolate','falter','fervent','foment','gaffe','heterodox','histrionic','implicit','inviolate','liability','obstinate','painstaking','phlegmatic','prodigious','propensity','qualm','renege','stinting','temper','tentative','unprecedented','vivacious'],
+  ['allusive','astute','commence','convalescent','curb','decry','duress','evoke','fawn','fret','glib','headstrong','intermittent','ire','languid','lull','mettlesome','mollify','neutralize','nonplussed','precipitous','pretentious','profound','propagate','recourse','refute','regress','repercussion','replenish','vigilant'],
+  ['assail','benevolent','berate','buoyant','buttress','condone','contravene','denounce','despotic','deviate','disinterested','escalate','exorcise','finicky','foil','intertwined','inundate','ironclad','jeopardize','mercurial','oblivious','perpetrate','plaintive','poignant','quiescent','reiterate','subside','subsume','surmount','tangential'],
+  ['adept','adverse','appropriate','archetype','articulate','auspicious','bereft','captious','conclusive','conspire','delineate','disentangle','exhort','frailty','grievance','harangue','ploy','poise','pomposity','proxy','relent','rhetoric','rigor','sparse','steadfast','suspect','tedious','vitality','whimsical','yield'],
+  ['apprehension','ardent','axiomatic','cease','conducive','corporeal','doctrinaire','eclectic','equanimity','exorbitant','fickle','figurative','flustered','gullible','idiosyncratic','incidental','ingrained','insolent','lampoon','lavish','lugubrious','macabre','morose','officious','ramification','serene','supplant','tacit','transcend','treatise'],
+  ['antagonize','barren','bombastic','cajole','chary','curmudgeon','dirge','estimable','euphemism','excoriate','exigent','haughty','heady','imperturbable','implacable','lambaste','miscreant','peccadillo','philistine','relegate','repugnant','sentimental','squander','swindle','tangible','turpitude','unalloyed','undercut','wheedle','xenophobic'],
+  ['abeyance','abstract','affront','agitate','august','burnish','coy','deprecate','disdain','disperse','distend','endemic','enmity','gauche','hysterical','impudent','inchoate','penchant','quandary','quarantine','quash','quibble','ravage','recant','redoubtable','retiring','shrill','sophistry','substantiate','wily'],
+  ['abscond','apogee','aspersion','bawdy','chagrin','collude','commiserate','conflagration','contretemps','conviction','croon','depose','detente','dowdy','echelon','ennui','expatiate','fraught','fulcrum','imbroglio','jocund','languish','nadir','nimble','ominous','outlandish','propitious','prurient','sadistic','zenith'],
+  ['aberrant','abide','bravado','callow','capitulate','cogitate','deportment','extemporize','factious','fallow','feint','flagrant','gratuitous','grovel','indecorous','intrigue','nominal','obdurate','obstreperous','odious','plucky','precocious','remuneration','slovenly','soliloquy','spurn','stolid','temerity','tenuous','verve'],
+  ['abrogate','aghast','apprise','beguile','boon','callous','coddle','crescendo','extenuating','frenetic','fringe','hapless','immaculate','obfuscate','ossify','pastiche','perspicacious','ponderous','recluse','retaliate','rhapsody','serendipitous','shirk','sinecure','sinuous','sordid','stanch','surfeit','ulterior','voluble'],
+  ['abstruse','auxiliary','caricature','depravity','dilettante','effrontery','encroach','endow','entreat','gregarious','indictment','indignant','ineluctable','inquisitive','latitude','levity','malevolent','mediate','occlude','pacify','paragon','patronize','penurious','piquant','rampant','remote','reprobate','turbid','turgid','vacuous']
+];
+
+// ── Storage ──
+const STORE_KEY = 'uvb_v1';
+const SHUF_KEY  = 'uvb_shuf_v1';
+const INTER_KEY = 'uvb_inter_v1';
+const MODE_KEY  = 'uvb_mode_v1';
+
+let status     = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+let intraDeck  = JSON.parse(localStorage.getItem(SHUF_KEY)  || '{}'); // g -> [wordIdx,...]
+let interDeck  = JSON.parse(localStorage.getItem(INTER_KEY) || 'null'); // [[g,w],...] | null
+let shuffleMode = localStorage.getItem(MODE_KEY) || 'none'; // 'none'|'intra'|'inter'
+
+let cur = {g: 0, row: 0}; // row = position within group's display order
+let interPos = 0;
+let interGroupOrders = {}; // g -> [wordIdx...] in inter-deck sequence
+let interPosMap = {};     // g -> {wordIdx -> interDeck position}
+let showDef = false;
+let ovMode = 'all';
+const defCache = {};
+
+const save      = () => localStorage.setItem(STORE_KEY, JSON.stringify(status));
+const saveIntra = () => localStorage.setItem(SHUF_KEY,  JSON.stringify(intraDeck));
+const saveInter = () => localStorage.setItem(INTER_KEY, JSON.stringify(interDeck));
+const saveMode  = () => localStorage.setItem(MODE_KEY,  shuffleMode);
+const key    = (g, w) => `${g}_${w}`;
+const getSt  = (g, w) => status[key(g, w)] || 'unseen';
+const setSt  = (g, w, s) => { status[key(g, w)] = s; save(); };
+const getOrder        = g => (shuffleMode === 'intra' && intraDeck[g]) ? intraDeck[g] : GROUPS[g].map((_, i) => i);
+const getDisplayOrder = g => (shuffleMode === 'inter' && interGroupOrders[g]) ? interGroupOrders[g] : getOrder(g);
+const getActualIdx    = (g, pos) => getDisplayOrder(g)[pos];
+const isIntraShuffled = g => !!intraDeck[g];
+
+// Returns {g, w, pos, total} for the current card regardless of mode
+function getCur() {
+  if (shuffleMode === 'inter' && interGroupOrders[cur.g]) {
+    const w = interGroupOrders[cur.g][cur.row] ?? 0;
+    return { g: cur.g, w, pos: cur.row, total: interGroupOrders[cur.g].length };
+  }
+  return { g: cur.g, w: getActualIdx(cur.g, cur.row), pos: cur.row, total: GROUPS[cur.g].length };
+}
+
+function buildInterGroupOrders() {
+  interGroupOrders = {}; interPosMap = {};
+  if (!interDeck) return;
+  interDeck.forEach(([g, w], pos) => {
+    if (!interGroupOrders[g]) { interGroupOrders[g] = []; interPosMap[g] = {}; }
+    interGroupOrders[g].push(w);
+    interPosMap[g][w] = pos;
+  });
+}
+
+function fisherYates(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function shuffleIntraGroup(g) {
+  intraDeck[g] = fisherYates(GROUPS[g].map((_, i) => i));
+  saveIntra();
+}
+
+function buildInterDeck() {
+  const all = [];
+  GROUPS.forEach((words, g) => words.forEach((_, w) => all.push([g, w])));
+  interDeck = fisherYates(all);
+  saveInter();
+  buildInterGroupOrders();
+}
+
+function cycleShuffle() {
+  if (shuffleMode === 'none') {
+    shuffleMode = 'intra';
+    if (!isIntraShuffled(cur.g)) shuffleIntraGroup(cur.g);
+    cur.row = 0;
+  } else if (shuffleMode === 'intra') {
+    shuffleMode = 'inter';
+    if (!interDeck) buildInterDeck();
+    else buildInterGroupOrders();
+    cur.row = 0;
+    interPos = interPosMap[cur.g]?.[interGroupOrders[cur.g]?.[0]] ?? 0;
+  } else {
+    shuffleMode = 'none';
+    cur.row = 0;
+  }
+  saveMode(); showDef = false; render();
+}
+
+// Navigate to a word by its original index (table clicks)
+function gotoWord(g, originalIdx) {
+  cur.g = g;
+  const pos = getDisplayOrder(g).indexOf(originalIdx);
+  cur.row = pos >= 0 ? pos : 0;
+  if (shuffleMode === 'inter' && interPosMap[g]) interPos = interPosMap[g][originalIdx] ?? 0;
+  showDef = false; render(); fetchDef(GROUPS[g][originalIdx]);
+}
+
+// dg = group delta (← →), dr = row delta (↑ ↓)
+function nav(dg, dr) {
+  if (dg !== 0) {
+    cur.g = (cur.g + dg + GROUPS.length) % GROUPS.length;
+    cur.row = Math.min(cur.row, getDisplayOrder(cur.g).length - 1);
+  } else {
+    const len = getDisplayOrder(cur.g).length;
+    cur.row = (cur.row + dr + len) % len;
+  }
+  if (shuffleMode === 'inter' && interPosMap[cur.g]) {
+    const w = interGroupOrders[cur.g][cur.row];
+    interPos = interPosMap[cur.g][w] ?? 0;
+  }
+  const {g, w} = getCur();
+  showDef = false; render(); fetchDef(GROUPS[g][w]);
+}
+
+function gotoGroup(g) {
+  if (shuffleMode === 'inter') { shuffleMode = 'none'; saveMode(); }
+  cur.g = g; cur.row = 0;
+  showDef = false; render();
+  document.getElementById('gpick').value = g;
+}
+
+function mark(s) {
+  const {g, w} = getCur();
+  setSt(g, w, s);
+  render();
+}
+
+function resetGroup() {
+  const {g} = getCur();
+  if (!confirm(`Reset progress for Group ${g + 1}?`)) return;
+  GROUPS[g].forEach((_, w) => delete status[key(g, w)]);
+  save(); render();
+}
+
+async function fetchDef(word) {
+  if (defCache[word] !== undefined) return defCache[word];
+  defCache[word] = null;
+  try {
+    const r = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    if (!r.ok) { defCache[word] = null; return null; }
+    defCache[word] = await r.json();
+  } catch { defCache[word] = null; }
+  const c = getCur(); if (showDef && GROUPS[c.g][c.w] === word) renderDef(word);
+  return defCache[word];
+}
+
+function renderDef(word) {
+  const body = document.getElementById('def-body');
+  const data = defCache[word];
+  if (data === undefined || data === null) {
+    body.innerHTML = data === undefined
+      ? '<div class="def-loading">Loading...</div>'
+      : `<div class="def-error">No definition found for <em>${word}</em></div>`;
+    return;
+  }
+  const entries = data[0]?.meanings?.slice(0, 3) || [];
+  if (!entries.length) { body.innerHTML = '<div class="def-error">No definition available.</div>'; return; }
+  body.innerHTML = entries.map(m => `
+    <div class="def-entry">
+      <div class="pos-tag">${m.partOfSpeech}</div>
+      ${m.definitions.slice(0, 2).map(d => `
+        <div class="def-text">${d.definition}</div>
+        ${d.example ? `<div class="def-ex">"${d.example}"</div>` : ''}
+      `).join('')}
+    </div>`).join('');
+}
+
+function closeDef(e) { if (e.target === e.currentTarget) toggleDef(); }
+
+async function toggleDef() {
+  const {g, w} = getCur();
+  const word = GROUPS[g][w];
+  showDef = !showDef;
+  const overlay = document.getElementById('defoverlay');
+  if (showDef) {
+    document.getElementById('def-word').textContent = word;
+    const ph = defCache[word]?.[0]?.phonetic || defCache[word]?.[0]?.phonetics?.find(p => p.text)?.text || '';
+    document.getElementById('def-ph').textContent = ph;
+    document.getElementById('def-body').innerHTML = '<div class="def-loading">Loading...</div>';
+    overlay.classList.add('visible');
+    await fetchDef(word);
+    renderDef(word);
+  } else {
+    overlay.classList.remove('visible');
+  }
+}
+
+function setOvMode(mode) {
+  ovMode = mode;
+  document.getElementById('tab-group').classList.toggle('active', mode === 'group');
+  document.getElementById('tab-all').classList.toggle('active', mode === 'all');
+  renderOv();
+}
+
+function renderOv() {
+  const body = document.getElementById('ovbody');
+  const {g: curG, w: curW} = getCur();
+
+  if (ovMode === 'group') {
+    body.innerHTML = `<div class="chip-body">${
+      getDisplayOrder(curG).map((actualIdx, pos) => {
+        const s = getSt(curG, actualIdx);
+        const isCur = actualIdx === curW;
+        const cls = [isCur ? 'cur' : '', s !== 'unseen' ? `s-${s}` : ''].filter(Boolean).join(' ');
+        return `<button class="chip ${cls}" onclick="gotoWord(${curG},${actualIdx})">${GROUPS[curG][actualIdx]}</button>`;
+      }).join('')
+    }</div>`;
+    return;
+  }
+
+  const sections = [[0,8],[8,16],[16,24],[24,32]];
+  body.innerHTML = sections.map(([start, end]) => `
+    <div class="group-section">
+      <div class="section-lbl">Groups ${start+1}–${end}</div>
+      <div class="group-row">
+        ${GROUPS.slice(start, end).map((_, gi) => {
+          const g = start + gi;
+          const order = getDisplayOrder(g);
+          const hd = `Group ${g+1}${shuffleMode !== 'none' ? ' ⇌' : ''}`;
+          return `<div class="group-col">
+            <div class="gcol-hd">${hd}</div>
+            ${order.map((actualIdx) => {
+              const s = getSt(g, actualIdx);
+              const isCur = g === curG && actualIdx === curW;
+              const cls = [isCur ? 'cur' : '', s !== 'unseen' ? `s-${s}` : ''].filter(Boolean).join(' ');
+              return `<div class="gword ${cls}" onclick="gotoWord(${g},${actualIdx})">${GROUPS[g][actualIdx]}</div>`;
+            }).join('')}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function render() {
+  const {g, w, pos, total} = getCur();
+  const word = GROUPS[g][w];
+  const st = getSt(g, w);
+
+  // Shuffle button
+  const shufBtn = document.getElementById('shuf-btn');
+  const modeLabels = { none: '⇌ Shuffle', intra: '⇌ Intra', inter: '⇌ Inter' };
+  shufBtn.textContent = modeLabels[shuffleMode];
+  shufBtn.classList.toggle('active', shuffleMode !== 'none');
+
+  // Word strip
+  const modeTag = shuffleMode === 'intra' ? ' · intra' : shuffleMode === 'inter' ? ' · inter' : '';
+  document.getElementById('word-strip').className = 'word-strip' + (st !== 'unseen' ? ` s-${st}` : '');
+  document.getElementById('cpos').textContent = `Group ${g + 1}${modeTag}`;
+  document.getElementById('cbadge').textContent = st === 'known' ? '✓ Known' : st === 'forgot' ? '✗ Forgot' : '';
+  document.getElementById('cbadge').className = 'ws-badge' + (st !== 'unseen' ? ` s-${st}` : '');
+  document.getElementById('word').textContent = word;
+  const ph = defCache[word]?.[0]?.phonetic || defCache[word]?.[0]?.phonetics?.find(p => p.text)?.text || '';
+  document.getElementById('phonetic').textContent = ph;
+
+  // Def modal
+  const overlay = document.getElementById('defoverlay');
+  if (showDef) {
+    document.getElementById('def-word').textContent = word;
+    const ph2 = defCache[word]?.[0]?.phonetic || defCache[word]?.[0]?.phonetics?.find(p => p.text)?.text || '';
+    document.getElementById('def-ph').textContent = ph2;
+    renderDef(word);
+  } else { overlay.classList.remove('visible'); }
+
+  // Counter + group picker
+  document.getElementById('wctr').textContent = `${pos + 1} / ${total}`;
+  document.getElementById('gpick').value = g;
+
+  // Stats — total across all groups in inter mode, otherwise per-group
+  let known = 0, forgot = 0, statTotal = 0;
+  if (shuffleMode === 'inter') {
+    GROUPS.forEach((words, ig) => words.forEach((_, iw) => {
+      statTotal++;
+      const s = getSt(ig, iw);
+      if (s === 'known') known++;
+      else if (s === 'forgot') forgot++;
+    }));
+  } else {
+    statTotal = GROUPS[g].length;
+    GROUPS[g].forEach((_, iw) => {
+      const s = getSt(g, iw);
+      if (s === 'known') known++;
+      else if (s === 'forgot') forgot++;
+    });
+  }
+  const unseen = statTotal - known - forgot;
+  const pctK = (known / statTotal * 100).toFixed(1);
+  const pctF = (forgot / statTotal * 100).toFixed(1);
+  document.getElementById('stats').innerHTML = `
+    <span class="stat"><span class="dot dot-k"></span>${known} known</span>
+    <span class="stat"><span class="dot dot-f"></span>${forgot} forgot</span>
+    <span class="stat"><span class="dot dot-u"></span>${unseen} remaining</span>
+    <div class="progress-wrap">
+      <div class="prog-k" style="width:${pctK}%"></div>
+      <div class="prog-f" style="width:${pctF}%"></div>
+    </div>
+    <div class="kb-hints">
+      <span class="kh"><kbd>↑↓</kbd> word</span>
+      <span class="kh"><kbd>←→</kbd> group</span>
+      <span class="kh"><kbd>Space</kbd> def</span>
+      <span class="kh"><kbd>G</kbd> knew</span>
+      <span class="kh"><kbd>R</kbd> forgot</span>
+      <span class="kh"><kbd>S</kbd> shuffle</span>
+      <span class="kh"><kbd>A</kbd> view</span>
+    </div>`;
+
+  renderOv();
+}
+
+function initGroupPicker() {
+  const sel = document.getElementById('gpick');
+  sel.innerHTML = GROUPS.map((_, i) => `<option value="${i}">Group ${i + 1}</option>`).join('');
+  sel.value = cur.g;
+}
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nav(1, 0); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); nav(-1, 0); }
+  else if (e.key === 'ArrowDown') { e.preventDefault(); nav(0, 1); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); nav(0, -1); }
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleDef(); }
+  else if (e.key === 'g' || e.key === 'G') mark('known');
+  else if (e.key === 'r' || e.key === 'R') mark('forgot');
+  else if (e.key === 'a' || e.key === 'A') setOvMode(ovMode === 'all' ? 'group' : 'all');
+  else if (e.key === 'n' || e.key === 'N') { const ng = (cur.g + 1) % GROUPS.length; gotoGroup(ng); }
+  else if (e.key === 's' || e.key === 'S') cycleShuffle();
+});
+
+initGroupPicker();
+// Restore inter position if mode was inter
+if (shuffleMode === 'inter' && !interDeck) shuffleMode = 'none';
+if (shuffleMode === 'inter' && interDeck) buildInterGroupOrders();
+gotoWord(cur.g, 0);
+</script>
+</body>
+</html>
