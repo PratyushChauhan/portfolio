@@ -1,0 +1,2 @@
+[   10685ms] [ERROR] Hydration completed but contains mismatches. @ https://www.gregmat.com/_nuxt/WvFEl8BK.js:5
+[   29024ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://gre-api.gregmat.com/announcements/headerbanner/:0
