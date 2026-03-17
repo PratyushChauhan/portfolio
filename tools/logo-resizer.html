@@ -48,6 +48,10 @@ h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-b
 .size-btn:hover{border-color:var(--accent);color:var(--text)}
 .size-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,242,254,.07)}
 
+#customSize:focus{border-color:var(--accent)}
+#customSize::placeholder{color:var(--dim)}
+#customSize::-webkit-inner-spin-button,#customSize::-webkit-outer-spin-button{-webkit-appearance:none}
+
 /* Download button */
 .btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;border-radius:.75rem;color:#050505;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:opacity .2s;text-decoration:none;margin-top:1.5rem}
 .btn-dl:hover{opacity:.85}
@@ -82,6 +86,7 @@ h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-b
     <button class="size-btn" data-size="192">192 × 192</button>
     <button class="size-btn" data-size="128">128 × 128</button>
     <button class="size-btn" data-size="64">64 × 64</button>
+    <input id="customSize" type="number" min="1" max="4096" placeholder="Custom…" style="background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--text);font-family:inherit;font-size:.85rem;font-weight:600;padding:.45rem .75rem;width:100px;outline:none;transition:border-color .2s" />
   </div>
 
   <div class="preview" id="preview">
@@ -125,14 +130,26 @@ dz.addEventListener('drop', e => {
 
 fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
 
+const customInput = document.getElementById('customSize');
+
 document.querySelectorAll('.size-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelector('.size-btn.active').classList.remove('active');
     btn.classList.add('active');
+    customInput.value = '';
     currentSize = parseInt(btn.dataset.size);
     if (currentFile) renderCanvas();
   });
 });
+
+customInput.addEventListener('focus', () => {
+  document.querySelector('.size-btn.active')?.classList.remove('active');
+});
+customInput.addEventListener('input', () => {
+  const v = parseInt(customInput.value);
+  if (v > 0 && v <= 4096) { currentSize = v; if (currentFile) renderCanvas(); }
+});
+customInput.addEventListener('keydown', e => { if (e.key === 'Enter') customInput.blur(); });
 
 function loadFile(file) {
   currentFile = file;
