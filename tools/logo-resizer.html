@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logo Resizer — Uncomplicated Tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050505;--surface:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);
+  --text:#f8f9fa;--dim:#a0a0a0;--accent:#00f2fe;--accent2:#4facfe;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100dvh;overflow-x:hidden;letter-spacing:-.01em}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 15% 25%,rgba(0,242,254,.06) 0%,transparent 30%),radial-gradient(circle at 85% 75%,rgba(79,172,254,.04) 0%,transparent 25%);z-index:-1;pointer-events:none}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);background:rgba(5,5,5,.8);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
+.nav-brand{font-weight:800;font-size:1.1rem;letter-spacing:-.03em;text-decoration:none;color:var(--text)}
+.nav-back{font-size:.875rem;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.nav-back:hover{color:var(--accent)}
+
+main{max-width:680px;margin:0 auto;padding:4rem 2rem 6rem}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;margin-bottom:.5rem}
+h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{color:var(--dim);font-size:1rem;margin-bottom:2.5rem}
+
+/* Drop zone */
+.dropzone{border:1.5px dashed var(--border);border-radius:1.25rem;padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .25s;background:var(--surface);position:relative}
+.dropzone:hover,.dropzone.drag{border-color:var(--accent);background:rgba(0,242,254,.04)}
+.dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-icon{font-size:2.5rem;margin-bottom:.75rem;opacity:.6}
+.dz-label{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.dz-sub{font-size:.875rem;color:var(--dim)}
+
+/* Preview area */
+.preview{display:none;gap:2rem;margin-top:2rem;align-items:flex-start;flex-wrap:wrap}
+.preview.visible{display:flex}
+.pane{flex:1;min-width:200px}
+.pane-label{font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:.75rem}
+.pane img,.pane canvas{max-width:100%;border-radius:.75rem;border:1px solid var(--border);display:block}
+
+/* Size selector */
+.controls{display:flex;align-items:center;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap}
+.size-btn{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--dim);font-family:inherit;font-size:.85rem;font-weight:600;padding:.45rem .9rem;cursor:pointer;transition:all .2s}
+.size-btn:hover{border-color:var(--accent);color:var(--text)}
+.size-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,242,254,.07)}
+
+/* Download button */
+.btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;border-radius:.75rem;color:#050505;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:opacity .2s;text-decoration:none;margin-top:1.5rem}
+.btn-dl:hover{opacity:.85}
+.btn-dl svg{flex-shrink:0}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="../index.html">P. CHAUHAN</a>
+  <a class="nav-back" href="index.html">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    All tools
+  </a>
+</nav>
+
+<main>
+  <h1><span>Logo</span> Resizer</h1>
+  <p class="subtitle">Drop any image — get a clean square PNG at the size you need.</p>
+
+  <div class="dropzone" id="dz">
+    <input type="file" id="fileInput" accept="image/*">
+    <div class="dz-icon">🖼️</div>
+    <div class="dz-label">Drop your image here</div>
+    <div class="dz-sub">or click to browse</div>
+  </div>
+
+  <div class="controls">
+    <span style="font-size:.85rem;color:var(--dim);font-weight:600">Output size:</span>
+    <button class="size-btn active" data-size="512">512 × 512</button>
+    <button class="size-btn" data-size="256">256 × 256</button>
+    <button class="size-btn" data-size="192">192 × 192</button>
+    <button class="size-btn" data-size="128">128 × 128</button>
+    <button class="size-btn" data-size="64">64 × 64</button>
+  </div>
+
+  <div class="preview" id="preview">
+    <div class="pane">
+      <div class="pane-label">Original</div>
+      <img id="origImg" alt="Original">
+    </div>
+    <div class="pane">
+      <div class="pane-label" id="resizedLabel">Resized (512 × 512)</div>
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <a class="btn-dl" id="dlBtn" style="display:none" download="logo-512.png">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Download PNG
+  </a>
+</main>
+
+<script>
+const dz = document.getElementById('dz');
+const fileInput = document.getElementById('fileInput');
+const origImg = document.getElementById('origImg');
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const preview = document.getElementById('preview');
+const dlBtn = document.getElementById('dlBtn');
+const resizedLabel = document.getElementById('resizedLabel');
+
+let currentSize = 512;
+let currentFile = null;
+
+// Drag highlighting
+dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+dz.addEventListener('drop', e => {
+  e.preventDefault(); dz.classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f && f.type.startsWith('image/')) loadFile(f);
+});
+
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
+
+document.querySelectorAll('.size-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelector('.size-btn.active').classList.remove('active');
+    btn.classList.add('active');
+    currentSize = parseInt(btn.dataset.size);
+    if (currentFile) renderCanvas();
+  });
+});
+
+function loadFile(file) {
+  currentFile = file;
+  const url = URL.createObjectURL(file);
+  origImg.src = url;
+  origImg.onload = () => renderCanvas();
+}
+
+function renderCanvas() {
+  const s = currentSize;
+  canvas.width = s; canvas.height = s;
+  ctx.clearRect(0, 0, s, s);
+  ctx.drawImage(origImg, 0, 0, s, s);
+  resizedLabel.textContent = `Resized (${s} \xd7 ${s})`;
+  const ext = (currentFile.name || 'logo').replace(/\.[^.]+$/, '');
+  dlBtn.download = `${ext}-${s}.png`;
+  dlBtn.href = canvas.toDataURL('image/png');
+  dlBtn.style.display = 'inline-flex';
+  preview.classList.add('visible');
+}
+</script>
+</body>
+</html>
