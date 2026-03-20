@@ -139,7 +139,7 @@ const customH = document.getElementById('customH');
 
 document.querySelectorAll('.size-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelector('.size-btn.active').classList.remove('active');
+    document.querySelector('.size-btn.active')?.classList.remove('active');
     btn.classList.add('active');
     const s = parseInt(btn.dataset.size);
     currentW = currentH = s;
