@@ -70,6 +70,12 @@ kbd{background:var(--border);border-radius:.25rem;padding:.1em .4em;font-family:
 .def-close{background:none;border:none;color:var(--muted);font-size:1.25rem;cursor:pointer;line-height:1;padding:.25rem;margin-left:auto}
 .def-close:hover{color:var(--text)}
 .def-loading,.def-error{color:var(--muted);font-size:.875rem}
+.syn-row{display:flex;align-items:flex-start;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;padding:.75rem;border:1px solid var(--border);border-radius:.75rem;background:rgba(255,255,255,.02)}
+.syn-label{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);padding-top:.15rem}
+.syn-list{display:flex;flex-wrap:wrap;gap:.4rem;flex:1}
+.syn-pill,.syn-empty{font-size:.8rem;line-height:1.2}
+.syn-pill{padding:.32rem .55rem;border-radius:999px;border:1px solid var(--accent-border);background:var(--accent-bg);color:var(--accent)}
+.syn-empty{color:var(--muted)}
 .def-entry+.def-entry{margin-top:.875rem;padding-top:.875rem;border-top:1px solid var(--border)}
 .pos-tag{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.3rem}
 .def-text{font-size:.9rem;color:var(--dim);line-height:1.6}
@@ -210,6 +216,7 @@ let interPosMap = {};     // g -> {wordIdx -> interDeck position}
 let showDef = false;
 let ovMode = 'all';
 const defCache = {};
+const synCache = {};
 
 const save      = () => localStorage.setItem(STORE_KEY, JSON.stringify(status));
 const saveIntra = () => localStorage.setItem(SHUF_KEY,  JSON.stringify(intraDeck));
@@ -222,6 +229,35 @@ const getOrder        = g => (shuffleMode === 'intra' && intraDeck[g]) ? intraDe
 const getDisplayOrder = g => (shuffleMode === 'inter' && interGroupOrders[g]) ? interGroupOrders[g] : getOrder(g);
 const getActualIdx    = (g, pos) => getDisplayOrder(g)[pos];
 const isIntraShuffled = g => !!intraDeck[g];
+
+function normalizeSynonym(term) {
+  return String(term || '')
+    .replace(/_/g, ' ')
+    .trim();
+}
+
+function addSynonym(term, seen, synonyms) {
+  const normalized = normalizeSynonym(term);
+  if (!normalized) return;
+  const lookup = normalized.toLowerCase();
+  if (seen.has(lookup)) return;
+  seen.add(lookup);
+  synonyms.push(normalized);
+}
+
+function collectSynonyms(word, data) {
+  const seen = new Set([word.toLowerCase()]);
+  const synonyms = [];
+  (data || []).forEach(entry => {
+    (entry.meanings || []).forEach(meaning => {
+      (meaning.synonyms || []).forEach(term => addSynonym(term, seen, synonyms));
+      (meaning.definitions || []).forEach(def => {
+        (def.synonyms || []).forEach(term => addSynonym(term, seen, synonyms));
+      });
+    });
+  });
+  return { seen, synonyms };
+}
 
 // Returns {g, w, pos, total} for the current card regardless of mode
 function getCur() {
@@ -312,6 +348,7 @@ function gotoGroup(g) {
   cur.g = g; cur.row = 0;
   showDef = false; render();
   document.getElementById('gpick').value = g;
+  fetchDef(GROUPS[g][0]);
 }
 
 function mark(s) {
@@ -332,32 +369,84 @@ async function fetchDef(word) {
   defCache[word] = null;
   try {
     const r = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-    if (!r.ok) { defCache[word] = null; return null; }
+    if (!r.ok) {
+      defCache[word] = null;
+      fetchSynonyms(word, []);
+      return null;
+    }
     defCache[word] = await r.json();
-  } catch { defCache[word] = null; }
+  } catch {
+    defCache[word] = null;
+    fetchSynonyms(word, []);
+  }
+  fetchSynonyms(word, defCache[word]);
   const c = getCur(); if (showDef && GROUPS[c.g][c.w] === word) renderDef(word);
   return defCache[word];
+}
+
+async function fetchSynonyms(word, data = defCache[word]) {
+  if (synCache[word] !== undefined) return synCache[word];
+  const { seen, synonyms } = collectSynonyms(word, data);
+  synCache[word] = null;
+  try {
+    if (synonyms.length < 3) {
+      const r = await fetch(`https://api.datamuse.com/words?rel_syn=${encodeURIComponent(word)}&max=10`);
+      if (r.ok) {
+        const extra = await r.json();
+        extra.forEach(item => addSynonym(item.word, seen, synonyms));
+      }
+    }
+  } catch {}
+  synCache[word] = synonyms.slice(0, 3);
+  const c = getCur();
+  if (showDef && GROUPS[c.g][c.w] === word) renderDef(word);
+  return synCache[word];
+}
+
+function renderSynonyms(word) {
+  const synonyms = synCache[word];
+  if (synonyms === undefined || synonyms === null) {
+    return `
+      <div class="syn-row">
+        <div class="syn-label">Synonyms</div>
+        <div class="syn-list"><div class="syn-empty">Loading...</div></div>
+      </div>`;
+  }
+  return `
+    <div class="syn-row">
+      <div class="syn-label">Synonyms</div>
+      <div class="syn-list">
+        ${synonyms.length
+          ? synonyms.map(term => `<span class="syn-pill">${term}</span>`).join('')
+          : '<div class="syn-empty">No synonyms found.</div>'}
+      </div>
+    </div>`;
 }
 
 function renderDef(word) {
   const body = document.getElementById('def-body');
   const data = defCache[word];
-  if (data === undefined || data === null) {
-    body.innerHTML = data === undefined
-      ? '<div class="def-loading">Loading...</div>'
-      : `<div class="def-error">No definition found for <em>${word}</em></div>`;
+  if (data === undefined) {
+    body.innerHTML = '<div class="def-loading">Loading...</div>';
+    return;
+  }
+  if (data === null) {
+    body.innerHTML = `
+      ${renderSynonyms(word)}
+      <div class="def-error">No definition found for <em>${word}</em></div>`;
     return;
   }
   const entries = data[0]?.meanings?.slice(0, 3) || [];
-  if (!entries.length) { body.innerHTML = '<div class="def-error">No definition available.</div>'; return; }
-  body.innerHTML = entries.map(m => `
-    <div class="def-entry">
-      <div class="pos-tag">${m.partOfSpeech}</div>
-      ${m.definitions.slice(0, 2).map(d => `
-        <div class="def-text">${d.definition}</div>
-        ${d.example ? `<div class="def-ex">"${d.example}"</div>` : ''}
-      `).join('')}
-    </div>`).join('');
+  body.innerHTML = `
+    ${renderSynonyms(word)}
+    ${entries.length ? entries.map(m => `
+      <div class="def-entry">
+        <div class="pos-tag">${m.partOfSpeech}</div>
+        ${m.definitions.slice(0, 2).map(d => `
+          <div class="def-text">${d.definition}</div>
+          ${d.example ? `<div class="def-ex">"${d.example}"</div>` : ''}
+        `).join('')}
+      </div>`).join('') : '<div class="def-error">No definition available.</div>'}`;
 }
 
 function closeDef(e) { if (e.target === e.currentTarget) toggleDef(); }
