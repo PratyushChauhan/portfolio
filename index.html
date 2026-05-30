@@ -323,6 +323,30 @@
             transform: scale(1.1);
         }
 
+        .skill-visual {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background:
+                radial-gradient(circle at 25% 25%, rgba(0, 242, 254, 0.22), transparent 28%),
+                linear-gradient(135deg, rgba(0, 242, 254, 0.14), rgba(79, 172, 254, 0.04));
+            color: var(--accent-color);
+        }
+
+        .skill-visual i {
+            font-size: 3.5rem;
+        }
+
+        .skill-visual span {
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
         .card-body {
             padding: 30px;
         }
@@ -470,6 +494,38 @@
         <div class="container">
             <h2 class="section-title reveal">Featured Projects</h2>
             <div class="row g-4">
+                <!-- Supertonic TTS -->
+                <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.1s;">
+                    <div class="card project-card">
+                        <div class="project-img-wrapper">
+                            <div class="ratio ratio-16x9">
+                                <div class="skill-visual">
+                                    <i class="fas fa-wave-square"></i>
+                                    <span>OpenClaw Skill</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="project-title mb-0">Supertonic TTS</h5>
+                                <span class="badge rounded-pill"
+                                    style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color);">OpenClaw
+                                    Skill</span>
+                            </div>
+                            <p class="project-text">An OpenClaw skill for local multilingual text-to-speech using
+                                Supertonic ONNX models. Supports offline WAV generation, 31 languages, built-in voices,
+                                and exported custom voice styles.</p>
+                            <div class="d-flex gap-3">
+                                <a href="https://clawhub.ai/pratyushchauhan/supertonic-tts" target="_blank"
+                                    rel="noopener noreferrer" class="btn-modern btn-primary-modern py-2 px-4"
+                                    style="font-size: 0.9rem;">
+                                    View Skill <i class="fas fa-external-link-alt ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Engram Project -->
                 <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.1s;">
                     <div class="card project-card">
