@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Hermes Formats Telegram Messages So Well — Pratyush Chauhan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<link rel="icon" type="image/png" href="../favicon.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050505;--surface:rgba(255,255,255,.03);--surface-hover:rgba(255,255,255,.06);--border:rgba(255,255,255,.08);
+  --text:#f0f2f5;--text-heading:#fff;--dim:#a0a0a0;--dimmer:#6b7280;
+  --accent:#00f2fe;--accent2:#4facfe;--accent-soft:rgba(0,242,254,.08);
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100dvh;overflow-x:hidden;letter-spacing:-.01em;line-height:1.7;font-size:1.05rem}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 15% 25%,rgba(0,242,254,.05) 0%,transparent 30%),radial-gradient(circle at 85% 75%,rgba(79,172,254,.03) 0%,transparent 25%);z-index:-1;pointer-events:none}
+
+/* Nav */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);background:rgba(5,5,5,.8);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
+.nav-brand{font-weight:800;font-size:1.1rem;letter-spacing:-.03em;text-decoration:none;color:var(--text-heading)}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+.nav-link{font-size:.875rem;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.nav-link:hover{color:var(--accent)}
+
+/* Article layout */
+article{max-width:760px;margin:0 auto;padding:4rem 1.5rem 6rem}
+
+/* Post header */
+.post-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.post-meta{display:flex;gap:.75rem;align-items:center;font-size:.85rem;color:var(--dim);margin-bottom:1rem;flex-wrap:wrap}
+.post-tag{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .65rem;border-radius:.35rem;background:rgba(0,242,254,.08);border:1px solid rgba(0,242,254,.2);color:var(--accent)}
+.post-title{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--text-heading);margin-bottom:1rem}
+.post-subtitle{font-size:1.15rem;color:var(--dim);font-weight:300;line-height:1.5}
+
+/* Typography */
+h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;color:var(--text-heading);margin:2.5rem 0 1rem;line-height:1.25}
+h2{font-size:1.6rem;font-weight:700;letter-spacing:-.015em;color:var(--text-heading);margin:2.2rem 0 .9rem;line-height:1.3;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+h3{font-size:1.25rem;font-weight:700;color:var(--text-heading);margin:1.8rem 0 .7rem;line-height:1.35}
+h4{font-size:1.1rem;font-weight:600;color:var(--text-heading);margin:1.4rem 0 .5rem}
+p{margin-bottom:1.2rem}
+strong{color:var(--text-heading);font-weight:600}
+
+/* Links */
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,242,254,.25);transition:border-color .2s}
+a:hover{border-bottom-color:var(--accent)}
+
+/* Lists */
+ul,ol{margin:1rem 0 1.2rem 1.5rem}
+li{margin-bottom:.5rem}
+ul li::marker{color:var(--dim)}
+
+/* Code */
+code{font-family:'SF Mono',Menlo,Monaco,'Courier New',monospace;font-size:.9em;background:var(--surface);padding:.15rem .4rem;border-radius:.3rem;color:#e2e8f0;border:1px solid var(--border)}
+pre{background:#0d1117;border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;overflow-x:auto;margin:1.2rem 0;font-size:.88rem;line-height:1.6}
+pre code{background:none;padding:0;border:none;font-size:inherit;color:inherit}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.95rem}
+th,td{padding:.65rem .9rem;text-align:left;border-bottom:1px solid var(--border)}
+th{font-weight:600;color:var(--text-heading);background:var(--surface);font-size:.85rem;letter-spacing:.02em;text-transform:uppercase}
+tr:hover td{background:var(--surface-hover)}
+
+/* Blockquotes */
+blockquote{border-left:3px solid var(--accent);padding-left:1.25rem;margin:1.5rem 0;color:var(--dim);font-style:italic}
+
+/* Horizontal rules */
+hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+
+/* Section numbers / callouts */
+.callout{background:var(--surface);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.callout-title{font-weight:700;color:var(--text-heading);margin-bottom:.4rem;font-size:1.05rem}
+
+/* Mermaid-like flow diagram */
+.flow-block{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin:1.5rem 0;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:.75rem}
+.flow-step{background:rgba(0,242,254,.1);border:1px solid rgba(0,242,254,.25);padding:.5rem 1rem;border-radius:.5rem;font-weight:600;font-size:.9rem}
+.flow-arrow{color:var(--dim);font-size:.8rem}
+.flow-branch{display:flex;gap:1rem;align-items:center}
+.flow-yes,.flow-no{padding:.4rem .8rem;border-radius:.4rem;font-size:.8rem;font-weight:600}
+.flow-yes{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80}
+.flow-no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
+
+/* Footer */
+.footer{text-align:center;padding:3rem 1.5rem;color:var(--dim);font-size:.85rem;border-top:1px solid var(--border);margin-top:auto}
+.footer a{color:var(--dim);border:none}
+.footer a:hover{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:640px){
+  article{padding:2.5rem 1rem 4rem}
+  h1{font-size:1.6rem}
+  h2{font-size:1.3rem}
+  .post-title{font-size:1.6rem}
+  nav{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="../index.html">P. CHAUHAN</a>
+  <div class="nav-links">
+    <a class="nav-link" href="../blog/index.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All posts
+    </a>
+    <a class="nav-link" href="../index.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Portfolio
+    </a>
+  </div>
+</nav>
+
+<article>
+
+<header class="post-header">
+  <div class="post-meta">
+    <span class="post-tag">Case Study</span>
+    <span>June 24, 2026</span>
+  </div>
+  <h1 class="post-title">How Hermes Formats Telegram Messages So Well</h1>
+  <p class="post-subtitle">A deep dive into Hermes Agent's dual-path rendering pipeline — Bot API 10.1 Rich Messages versus MarkdownV2 fallback — and the engineering decisions that keep agent replies readable on every Telegram client.</p>
+</header>
+
+<h2 id="the-problem">1. The Problem</h2>
+<p>Telegram bots communicate through the Bot API, which historically only supported <strong>MarkdownV2</strong> and HTML as parse modes. Standard Markdown — the lingua franca of LLM outputs (tables, task lists, math blocks, collapsible sections) — has <strong>no native representation</strong> in MarkdownV2. This creates a gap:</p>
+
+<table>
+<thead>
+<tr><th>What LLMs output</th><th>What MarkdownV2 supports</th></tr>
+</thead>
+<tbody>
+<tr><td>Pipe tables (<code>| col | col |</code>)</td><td>❌ No table syntax — <code>|</code> is just an escaped literal</td></tr>
+<tr><td>Task lists (<code>- [x] done</code>)</td><td>❌ No checkbox syntax</td></tr>
+<tr><td>Collapsible <code>&lt;details&gt;</code> blocks</td><td>❌ Not supported</td></tr>
+<tr><td>Block math (<code>$$...$$</code>)</td><td>❌ Not supported</td></tr>
+<tr><td>Standard links, bold, italic</td><td>✅ Supported with different syntax</td></tr>
+</tbody>
+</table>
+
+<p>Without careful conversion, agent replies to Telegram users would look broken: tables rendered as noisy backslash-pipe text, special characters triggering parse errors, and formatting silently dropped.</p>
+
+<h2 id="the-architecture">2. The Architecture: Two-Path Rendering</h2>
+<p>Hermes does not force the agent to "think in Telegram syntax." Instead, the agent outputs <strong>standard Markdown</strong>, and the Telegram gateway adapter routes it through one of two paths:</p>
+
+<div class="flow-block">
+  <div class="flow-step">Agent Output (Standard Markdown)</div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">_needs_rich_rendering()?</div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-branch">
+    <div class="flow-yes">YES → Rich Path (sendRichMessage)</div>
+    <div class="flow-no">NO → MarkdownV2 Fallback (editMessageText)</div>
+  </div>
+</div>
+
+<h3 id="path-a">Path A: Bot API 10.1 Rich Messages (Default)</h3>
+<p>When the content contains constructs that MarkdownV2 degrades, Hermes sends via Telegram's native <code>sendRichMessage</code> endpoint using the <strong>agent's raw, unmodified markdown</strong>.</p>
+
+<table>
+<thead>
+<tr><th>Feature</th><th>Rich Message Handling</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Pipe tables</strong></td><td>Native Telegram table rendering</td></tr>
+<tr><td><strong>Task lists</strong> (<code>- [ ]</code> / <code>- [x]</code>)</td><td>Native checkboxes</td></tr>
+<tr><td><strong>Collapsible details</strong> (<code>&lt;details&gt;</code>)</td><td>Native expand/collapse blocks</td></tr>
+<tr><td><strong>Block math</strong> (<code>$$...$$</code>)</td><td>Native math rendering</td></tr>
+<tr><td><strong>Streaming previews</strong></td><td><code>sendRichMessageDraft</code> in private chats</td></tr>
+</tbody>
+</table>
+
+<p><strong>Delivery mechanics:</strong></p>
+<ul>
+<li>The streaming preview is sent as a draft</li>
+<li>The final answer is delivered by <strong>editing the existing preview in-place</strong> via <code>editMessageText</code> with the <code>rich_message</code> parameter</li>
+<li><strong>No duplicate messages</strong>, no delete-and-resend flicker</li>
+</ul>
+
+<p><strong>Limits &amp; safeguards:</strong></p>
+<ul>
+<li>Max 32,768 UTF-8 characters — content above this automatically skips to the fallback path</li>
+<li>If Telegram rejects the payload (older <code>python-telegram-bot</code>, parser error, oversized blocks), it <strong>transparently falls back</strong> to MarkdownV2</li>
+<li>Transient/network errors are <strong>not silently retried</strong> — avoids duplicate final messages</li>
+<li>A known TDesktop crash with math-inside-details blocks is detected and routed to fallback</li>
+</ul>
+
+<h3 id="path-b">Path B: MarkdownV2 Fallback</h3>
+<p>For ordinary replies or when rich messages are unavailable, Hermes runs the markdown through a <strong>10-step conversion pipeline</strong>:</p>
+
+<h2 id="the-pipeline">3. The MarkdownV2 Conversion Pipeline</h2>
+<p>All logic lives in <code>TelegramAdapter.format_message()</code> in <code>gateway/platforms/telegram.py</code>.</p>
+
+<h3>Step 0: Table Rewrite</h3>
+<p>Before any other conversion, GFM pipe tables are detected and rewritten into <strong>Telegram-friendly row groups</strong> via <code>_wrap_markdown_tables()</code>:</p>
+
+<pre><code>Input:
+| Name  | Status | Uptime |
+|-------|--------|--------|
+| poller| on     | 99.9%  |
+| dash  | on     | 99.8%  |
+
+Output:
+**poller**
+• Name: poller
+• Status: on
+• Uptime: 99.9%
+
+**dash**
+• Name: dash
+• Status: on
+• Uptime: 99.8%</code></pre>
+
+<p>This is necessary because MarkdownV2's <code>\|</code> is just a literal escaped pipe — tables would otherwise render as unreadable backslash noise.</p>
+
+<h3>Step 1–2: Protect Code Regions</h3>
+<p>Fenced code blocks and inline code spans are extracted into <strong>placeholder tokens</strong> so their contents are never touched by the escaping steps that follow. Inside code:</p>
+<ul>
+<li><code>\</code> → <code>\\</code> (backslash escaping per MarkdownV2 spec)</li>
+<li><code>`</code> → <code>\`</code> (backtick escaping)</li>
+</ul>
+
+<h3>Step 3: Convert Links</h3>
+<p>Standard markdown links are converted with proper escaping:</p>
+<ul>
+<li>Display text: all MarkdownV2 special chars escaped</li>
+<li>URL: only <code>)</code> and <code>\</code> escaped (per MarkdownV2 URL rules)</li>
+</ul>
+
+<pre><code>Input:  Click [here](https://example.com/path_(foo))
+Output: Click [here](https://example.com/path_\(foo\))</code></pre>
+
+<h3>Step 4–7: Convert Formatting Syntax</h3>
+<table>
+<thead>
+<tr><th>Standard Markdown</th><th>MarkdownV2</th><th>Implementation</th></tr>
+</thead>
+<tbody>
+<tr><td><code>## Title</code></td><td><code>*Title*</code> (bold)</td><td><code>re.sub(r'^#{1,6}\s+(.+)$', ...)</code></td></tr>
+<tr><td><code>**bold**</code></td><td><code>*bold*</code></td><td><code>re.sub(r'\*\*(.+?)\*\*', ...)</code></td></tr>
+<tr><td><code>*italic*</code></td><td><code>_italic_</code></td><td><code>re.sub(r'\*([^*\n]+)\*', ...)</code></td></tr>
+<tr><td><code>~~strike~~</code></td><td><code>~strike~</code></td><td><code>re.sub(r'~~(.+?)~~', ...)</code></td></tr>
+<tr><td><code>||spoiler||</code></td><td><code>||spoiler||</code></td><td>Protected from <code>\|</code> escaping</td></tr>
+</tbody>
+</table>
+
+<h3>Step 8: Escape All Remaining Special Characters</h3>
+<p>Any character outside a protected code region that is special in MarkdownV2 gets a preceding backslash:</p>
+
+<pre><code>_MDV2_ESCAPE_RE = re.compile(r'([_*\[\]()~`>#\+\-=|{}.!\\])')
+
+def _escape_mdv2(text: str) -> str:
+    return _MDV2_ESCAPE_RE.sub(r'\\\1', text)</code></pre>
+
+<p><strong>Characters escaped:</strong> <code>_ * [ ] ( ) ~ ` > # + - = | { } . ! \</code></p>
+
+<h3>Step 9: Restore Protected Regions</h3>
+<p>The placeholder tokens are swapped back with their protected code block/inline code content, now properly escaped for MarkdownV2.</p>
+
+<h2 id="streaming">4. Streaming &amp; Delivery</h2>
+<table>
+<thead>
+<tr><th>Phase</th><th>Private Chats</th><th>Groups / Supergroups</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Streaming</strong></td><td><code>sendRichMessageDraft</code> for real-time token preview</td><td>Falls back to <code>editMessageText</code> (drafts are DM-only)</td></tr>
+<tr><td><strong>Finalization</strong></td><td><code>editMessageText</code> with <code>rich_message</code> edits the preview in-place</td><td>Sends final message directly</td></tr>
+<tr><td><strong>Fallback</strong></td><td>Any draft failure switches to edit-based streaming for that turn</td><td>Already on edit path</td></tr>
+</tbody>
+</table>
+
+<h2 id="key-decisions">5. Key Engineering Decisions</h2>
+
+<div class="callout">
+<div class="callout-title">Agent writes standard Markdown</div>
+<p>The agent should not be burdened with platform-specific syntax. Separation of concerns: agent generates content, gateway adapts delivery.</p>
+</div>
+
+<div class="callout">
+<div class="callout-title">Two paths instead of one</div>
+<p>MarkdownV2 is the safe, universal baseline. Rich messages are used only when they materially improve output. This avoids client compatibility issues.</p>
+</div>
+
+<div class="callout">
+<div class="callout-title">Table → bullet groups</div>
+<p>More readable on mobile than fenced code blocks for small tables. Larger tables fall back to code blocks.</p>
+</div>
+
+<div class="callout">
+<div class="callout-title">Placeholders for code regions</div>
+<p>A clean pattern that prevents the escaping regex from corrupting code contents, while still applying MarkdownV2's required internal escapes.</p>
+</div>
+
+<div class="callout">
+<div class="callout-title">In-place rich edit</div>
+<p>Deleting the preview and sending a new message causes flicker. Editing the existing message's <code>rich_message</code> field is seamless.</p>
+</div>
+
+<div class="callout">
+<div class="callout-title">Transparent fallback</div>
+<p>If rich delivery fails for any reason, the user still gets a perfectly readable MarkdownV2 message. No error bubbles, no lost messages.</p>
+</div>
+
+<div class="callout">
+<div class="callout-title">Character limit gate</div>
+<p>The 32,768 char pre-check avoids a round-trip to Telegram's servers for oversized content.</p>
+</div>
+
+<h2 id="configuration">6. Configuration</h2>
+<p>Operators can tune behavior in <code>~/.hermes/config.yaml</code>:</p>
+
+<pre><code>gateway:
+  streaming:
+    enabled: true
+    transport: auto    # auto | draft | edit | off
+  platforms:
+    telegram:
+      extra:
+        rich_messages: true        # Bot API 10.1 rich messages
+        disable_link_previews: false</code></pre>
+
+<ul>
+<li><code>rich_messages: false</code> — Forces all replies onto the legacy MarkdownV2 path</li>
+<li><code>telegram.pretty_tables: false</code> — Disables table-to-bullet normalization, forces code blocks</li>
+</ul>
+
+<h2 id="results">7. Results</h2>
+<p>The pipeline successfully bridges the gap between "what LLMs naturally output" and "what Telegram can render." Users see:</p>
+<ul>
+<li><strong>Tables</strong> that are readable on mobile (bullet groups) or natively rendered (rich path)</li>
+<li><strong>Code blocks</strong> that are never corrupted by escaping</li>
+<li><strong>Links, bold, italic</strong> that render consistently across clients</li>
+<li><strong>Math, task lists, collapsible sections</strong> that render natively when supported</li>
+<li><strong>No parse errors</strong> — every special character is either properly escaped or inside a protected region</li>
+<li><strong>No duplicate messages</strong> — streaming and finalization edit the same message</li>
+<li><strong>No silent failures</strong> — every error path degrades gracefully to a readable fallback</li>
+</ul>
+
+<h2 id="files-referenced">8. Files Referenced</h2>
+<table>
+<thead>
+<tr><th>File</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>gateway/platforms/telegram.py</code></td><td>Main adapter: format_message, rich send logic, streaming</td></tr>
+<tr><td><code>gateway/platforms/base.py</code></td><td>BasePlatformAdapter with REQUIRES_EDIT_FINALIZE contract</td></tr>
+<tr><td><code>gateway/stream_consumer.py</code></td><td>Streaming edit/draft orchestration</td></tr>
+<tr><td><code>gateway/rich_sent_store.py</code></td><td>Index of rich messages for continuation tracking</td></tr>
+<tr><td><code>tests/gateway/test_telegram_format.py</code></td><td>Unit tests for escaping, table wrapping, edge cases</td></tr>
+<tr><td><code>website/docs/user-guide/messaging/telegram.md</code></td><td>Operator-facing documentation</td></tr>
+</tbody>
+</table>
+
+<hr>
+
+<p style="color:var(--dim);font-size:.95rem;margin-top:3rem">Case study compiled from live source inspection of the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> codebase. Hermes is a personal AI agent platform by <a href="https://nousresearch.com/">Nous Research</a>.</p>
+
+</article>
+
+<div class="footer">
+  <a href="../blog/index.html">← All posts</a> &nbsp;·&nbsp; <a href="../index.html">Portfolio →</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
