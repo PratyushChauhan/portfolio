@@ -75,13 +75,7 @@ hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
 .callout-title{font-weight:700;color:var(--text-heading);margin-bottom:.4rem;font-size:1.05rem}
 
 /* Mermaid-like flow diagram */
-.flow-block{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin:1.5rem 0;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:.75rem}
-.flow-step{background:rgba(0,242,254,.1);border:1px solid rgba(0,242,254,.25);padding:.5rem 1rem;border-radius:.5rem;font-weight:600;font-size:.9rem}
-.flow-arrow{color:var(--dim);font-size:.8rem}
-.flow-branch{display:flex;gap:1rem;align-items:center}
-.flow-yes,.flow-no{padding:.4rem .8rem;border-radius:.4rem;font-size:.8rem;font-weight:600}
-.flow-yes{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:#4ade80}
-.flow-no{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171}
+.flow-svg{display:block;margin:1.5rem auto;max-width:100%}
 
 /* Footer */
 .footer{text-align:center;padding:3rem 1.5rem;color:var(--dim);font-size:.85rem;border-top:1px solid var(--border);margin-top:auto}
@@ -146,16 +140,45 @@ hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
 <h2 id="the-architecture">2. The Architecture: Two-Path Rendering</h2>
 <p>Hermes does not force the agent to "think in Telegram syntax." Instead, the agent outputs <strong>standard Markdown</strong>, and the Telegram gateway adapter routes it through one of two paths:</p>
 
-<div class="flow-block">
-  <div class="flow-step">Agent Output (Standard Markdown)</div>
-  <div class="flow-arrow">↓</div>
-  <div class="flow-step">_needs_rich_rendering()?</div>
-  <div class="flow-arrow">↓</div>
-  <div class="flow-branch">
-    <div class="flow-yes">YES → Rich Path (sendRichMessage)</div>
-    <div class="flow-no">NO → MarkdownV2 Fallback (editMessageText)</div>
-  </div>
-</div>
+<svg class="flow-svg" viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" aria-label="Flowchart: Agent output goes to a decision node, then branches to Rich Path or MarkdownV2 Fallback">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <!-- background card -->
+  <rect x="10" y="10" width="620" height="320" rx="12" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <!-- top box -->
+  <rect x="170" y="30" width="300" height="44" rx="8" fill="rgba(0,242,254,0.08)" stroke="rgba(0,242,254,0.3)" stroke-width="1.5"/>
+  <text x="320" y="58" text-anchor="middle" fill="#f0f2f5" font-size="14" font-weight="600" font-family="Outfit,sans-serif">Agent Output (Standard Markdown)</text>
+
+  <!-- arrow down to diamond -->
+  <line x1="320" y1="74" x2="320" y2="118" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- diamond -->
+  <polygon points="320,128 420,168 320,208 220,168" fill="rgba(0,242,254,0.06)" stroke="rgba(0,242,254,0.35)" stroke-width="1.5"/>
+  <text x="320" y="173" text-anchor="middle" fill="#f0f2f5" font-size="13" font-weight="600" font-family="Outfit,sans-serif">_needs_rich_rendering()?</text>
+
+  <!-- branch lines -->
+  <polyline points="320,208 320,228 140,228 140,248" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <polyline points="320,208 320,228 500,228 500,248" fill="none" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- YES label -->
+  <text x="155" y="222" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="700" font-family="Outfit,sans-serif">YES</text>
+  <!-- NO label -->
+  <text x="485" y="222" text-anchor="middle" fill="#f87171" font-size="12" font-weight="700" font-family="Outfit,sans-serif">NO</text>
+
+  <!-- left box -->
+  <rect x="20" y="258" width="240" height="50" rx="8" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.35)" stroke-width="1.5"/>
+  <text x="140" y="280" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="600" font-family="Outfit,sans-serif">Rich Path</text>
+  <text x="140" y="298" text-anchor="middle" fill="#a0a0a0" font-size="11" font-family="Outfit,sans-serif">sendRichMessage</text>
+
+  <!-- right box -->
+  <rect x="380" y="258" width="240" height="50" rx="8" fill="rgba(239,68,68,0.08)" stroke="rgba(239,68,68,0.35)" stroke-width="1.5"/>
+  <text x="500" y="280" text-anchor="middle" fill="#f87171" font-size="13" font-weight="600" font-family="Outfit,sans-serif">MarkdownV2 Fallback</text>
+  <text x="500" y="298" text-anchor="middle" fill="#a0a0a0" font-size="11" font-family="Outfit,sans-serif">editMessageText</text>
+</svg>
 
 <h3 id="path-a">Path A: Bot API 10.1 Rich Messages (Default)</h3>
 <p>When the content contains constructs that MarkdownV2 degrades, Hermes sends via Telegram's native <code>sendRichMessage</code> endpoint using the <strong>agent's raw, unmodified markdown</strong>.</p>
