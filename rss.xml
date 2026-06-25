@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog — Pratyush Chauhan</title>
+    <link>https://pratyushchauhan.github.io/blog/</link>
+    <description>Notes on systems, AI, and building things.</description>
+    <language>en</language>
+    <lastBuildDate>Wed, 25 Jun 2025 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://pratyushchauhan.github.io/rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How Hermes Formats Telegram Messages So Well</title>
+      <link>https://pratyushchauhan.github.io/blog/hermes-telegram-formatting.html</link>
+      <guid>https://pratyushchauhan.github.io/blog/hermes-telegram-formatting.html</guid>
+      <pubDate>Wed, 25 Jun 2025 00:00:00 GMT</pubDate>
+      <description>A deep case study on how Hermes Agent converts Markdown to native Telegram formatting — tables, code blocks, bold, italic, and more.</description>
+    </item>
+  </channel>
+</rss>

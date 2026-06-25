@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#050505">
+<title>404 — Page Not Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="./favicon.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050505;--text:#f8f9fa;--dim:#a0a0a0;--accent:#00f2fe;--accent2:#4facfe;--border:rgba(255,255,255,.08);}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100dvh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 15% 25%,rgba(0,242,254,.06) 0%,transparent 30%),radial-gradient(circle at 85% 75%,rgba(79,172,254,.04) 0%,transparent 25%);z-index:-1;pointer-events:none}
+.wrap{max-width:480px}
+.code{font-size:6rem;font-weight:800;line-height:1;letter-spacing:-.04em;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+h1{font-size:1.5rem;font-weight:600;margin-bottom:.75rem}
+p{color:var(--dim);font-size:1rem;line-height:1.6;margin-bottom:2rem}
+a{display:inline-flex;align-items:center;gap:.5rem;color:var(--accent);text-decoration:none;font-weight:600;border:1px solid rgba(0,242,254,.25);padding:.65rem 1.25rem;border-radius:.75rem;transition:all .2s}
+a:hover{border-color:var(--accent);background:rgba(0,242,254,.06)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="code">404</div>
+  <h1>Page not found</h1>
+  <p>The link you followed may be broken or the page may have been removed.</p>
+  <a href="/">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M7 3L3 8l4 5M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Back to home
+  </a>
+</div>
+</body>
+</html>
