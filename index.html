@@ -8,9 +8,7 @@
     <!-- Modern Typography: Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./favicon.png">
@@ -69,6 +67,231 @@
             --font-main: 'Outfit', sans-serif;
         }
 
+        /* === Bootstrap Replacement CSS === */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -12px;
+        }
+
+        .row.g-4 {
+            gap: 0;
+        }
+
+        .row.g-4 > [class*="col-"] {
+            padding: 0 12px;
+            margin-bottom: 24px;
+        }
+
+        .col-md-5, .col-md-7, .col-md-6, .col-lg-6, .col-lg-3 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0 12px;
+        }
+
+        .d-flex { display: flex; }
+        .justify-content-between { justify-content: space-between; }
+        .align-items-center { align-items: center; }
+        .align-items-start { align-items: flex-start; }
+        .text-center { text-align: center; }
+        .gap-3 { gap: 1rem; }
+        .mb-0 { margin-bottom: 0; }
+        .mb-3 { margin-bottom: 1rem; }
+        .mb-5 { margin-bottom: 3rem; }
+        .ms-2 { margin-left: 0.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .px-4 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-clip: border-box;
+            border-radius: 20px;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            padding: 30px;
+        }
+
+        .card-img-top {
+            width: 100%;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .object-fit-cover { object-fit: cover; }
+        .img-fluid { max-width: 100%; height: auto; }
+        .rounded-circle { border-radius: 50%; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+        }
+
+        .rounded-pill { border-radius: 50rem; }
+
+        .ratio {
+            position: relative;
+            width: 100%;
+        }
+
+        .ratio::before {
+            display: block;
+            padding-top: var(--ratio-aspect, 56.25%);
+            content: "";
+        }
+
+        .ratio > * {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ratio-16x9 { --ratio-aspect: 56.25%; }
+
+        /* Custom Navbar (replaces Bootstrap navbar) */
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.25rem 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            font-weight: 500;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+            position: relative;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-link.highlight {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: #000;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .nav-link.highlight:hover {
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 242, 254, 0.25);
+        }
+
+        .nav-toggle-label {
+            display: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-toggle-label span,
+        .nav-toggle-label span::before,
+        .nav-toggle-label span::after {
+            display: block;
+            background: var(--text-main);
+            height: 2px;
+            width: 24px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .nav-toggle-label span::before,
+        .nav-toggle-label span::after {
+            content: '';
+            position: absolute;
+        }
+
+        .nav-toggle-label span::before { top: -7px; }
+        .nav-toggle-label span::after { top: 7px; }
+
+        @media (min-width: 768px) {
+            .col-md-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+            .col-md-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+            .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+            .order-md-1 { order: 1; }
+            .order-md-2 { order: 2; }
+            .mb-md-0 { margin-bottom: 0; }
+        }
+
+        @media (min-width: 992px) {
+            .col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+            .col-lg-3 { flex: 0 0 25%; max-width: 25%; }
+        }
+
+        @media (max-width: 767px) {
+            .nav-toggle-label { display: flex; align-items: center; justify-content: center; min-height: 48px; min-width: 48px; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(20px); padding: 1rem 2rem; border-bottom: 1px solid var(--glass-border); flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+            #nav-toggle:checked ~ .nav-links { display: flex; }
+            .nav-link { padding: 0.5rem 0; margin: 0; min-height: 48px; display: flex; align-items: center; }
+            .nav-link.highlight { margin: 0; }
+            .site-nav { flex-wrap: wrap; }
+        }
+
+        /* === End Bootstrap Replacement === */
+
         .project-card {
             display: flex;
             flex-direction: column;
@@ -108,45 +331,7 @@
             transition: background 0.1s ease;
         }
 
-        /* Navbar Styling */
-        .navbar {
-            background: rgba(5, 5, 5, 0.8) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 1.25rem 0;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--text-main) !important;
-            letter-spacing: -0.03em;
-        }
-
-        .nav-link {
-            color: var(--text-dim) !important;
-            font-weight: 500;
-            margin: 0 15px;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: var(--accent-color) !important;
-        }
-
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
-            border-radius: 2px;
-        }
+        /* Navbar: see .site-nav in Bootstrap Replacement block above */
 
         /* Hero Section */
         .hero-section {
@@ -300,6 +485,231 @@
             letter-spacing: -0.02em;
         }
 
+        /* === Bootstrap Replacement CSS === */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -12px;
+        }
+
+        .row.g-4 {
+            gap: 0;
+        }
+
+        .row.g-4 > [class*="col-"] {
+            padding: 0 12px;
+            margin-bottom: 24px;
+        }
+
+        .col-md-5, .col-md-7, .col-md-6, .col-lg-6, .col-lg-3 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0 12px;
+        }
+
+        .d-flex { display: flex; }
+        .justify-content-between { justify-content: space-between; }
+        .align-items-center { align-items: center; }
+        .align-items-start { align-items: flex-start; }
+        .text-center { text-align: center; }
+        .gap-3 { gap: 1rem; }
+        .mb-0 { margin-bottom: 0; }
+        .mb-3 { margin-bottom: 1rem; }
+        .mb-5 { margin-bottom: 3rem; }
+        .ms-2 { margin-left: 0.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .px-4 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-5 { padding-top: 3rem; padding-bottom: 3rem; }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-clip: border-box;
+            border-radius: 20px;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            padding: 30px;
+        }
+
+        .card-img-top {
+            width: 100%;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .object-fit-cover { object-fit: cover; }
+        .img-fluid { max-width: 100%; height: auto; }
+        .rounded-circle { border-radius: 50%; }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+        }
+
+        .rounded-pill { border-radius: 50rem; }
+
+        .ratio {
+            position: relative;
+            width: 100%;
+        }
+
+        .ratio::before {
+            display: block;
+            padding-top: var(--ratio-aspect, 56.25%);
+            content: "";
+        }
+
+        .ratio > * {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .ratio-16x9 { --ratio-aspect: 56.25%; }
+
+        /* Custom Navbar (replaces Bootstrap navbar) */
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.25rem 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .nav-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            font-weight: 500;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+            position: relative;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-link.highlight {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: #000;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .nav-link.highlight:hover {
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 242, 254, 0.25);
+        }
+
+        .nav-toggle-label {
+            display: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .nav-toggle-label span,
+        .nav-toggle-label span::before,
+        .nav-toggle-label span::after {
+            display: block;
+            background: var(--text-main);
+            height: 2px;
+            width: 24px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .nav-toggle-label span::before,
+        .nav-toggle-label span::after {
+            content: '';
+            position: absolute;
+        }
+
+        .nav-toggle-label span::before { top: -7px; }
+        .nav-toggle-label span::after { top: 7px; }
+
+        @media (min-width: 768px) {
+            .col-md-5 { flex: 0 0 41.666667%; max-width: 41.666667%; }
+            .col-md-7 { flex: 0 0 58.333333%; max-width: 58.333333%; }
+            .col-md-6 { flex: 0 0 50%; max-width: 50%; }
+            .order-md-1 { order: 1; }
+            .order-md-2 { order: 2; }
+            .mb-md-0 { margin-bottom: 0; }
+        }
+
+        @media (min-width: 992px) {
+            .col-lg-6 { flex: 0 0 50%; max-width: 50%; }
+            .col-lg-3 { flex: 0 0 25%; max-width: 25%; }
+        }
+
+        @media (max-width: 767px) {
+            .nav-toggle-label { display: flex; align-items: center; justify-content: center; min-height: 48px; min-width: 48px; }
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(20px); padding: 1rem 2rem; border-bottom: 1px solid var(--glass-border); flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+            #nav-toggle:checked ~ .nav-links { display: flex; }
+            .nav-link { padding: 0.5rem 0; margin: 0; min-height: 48px; display: flex; align-items: center; }
+            .nav-link.highlight { margin: 0; }
+            .site-nav { flex-wrap: wrap; }
+        }
+
+        /* === End Bootstrap Replacement === */
+
         .project-card {
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
@@ -418,44 +828,21 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">P. CHAUHAN</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#skills">Skills</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#projects">Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="tools/index.html" style="color:var(--text-main) !important;font-weight:600;">Tools</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="blog/index.html">Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#publications">Publications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#patents">Patents</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://docs.google.com/document/d/1ScESLbaHCVIhBrWAUD98pzX8L20hg-3P/"
-                            target="_blank">Resume</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link highlight" href="https://calendar.app.google/sVBFoX6s7eFPxdEUA"
-                            target="_blank">Book a Meeting</a>
-                    </li>
-                </ul>
+    <nav class="site-nav">
+        <div class="nav-inner">
+            <a class="nav-brand" href="#">P. CHAUHAN</a>
+            <input type="checkbox" id="nav-toggle" style="display:none">
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation"><span></span></label>
+            <div class="nav-links">
+                <a class="nav-link" href="#home">Home</a>
+                <a class="nav-link" href="#skills">Skills</a>
+                <a class="nav-link" href="#projects">Projects</a>
+                <a class="nav-link" href="tools/index.html" style="font-weight:600;">Tools</a>
+                <a class="nav-link" href="blog/index.html">Blog</a>
+                <a class="nav-link" href="#publications">Publications</a>
+                <a class="nav-link" href="#patents">Patents</a>
+                <a class="nav-link" href="https://docs.google.com/document/d/1ScESLbaHCVIhBrWAUD98pzX8L20hg-3P/" target="_blank">Resume</a>
+                <a class="nav-link highlight" href="https://calendar.app.google/sVBFoX6s7eFPxdEUA" target="_blank">Book a Meeting</a>
             </div>
         </div>
     </nav>
@@ -519,7 +906,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="project-title mb-0">Engram</h5>
+                                <h3 class="project-title mb-0">Engram</h3>
                                 <span class="badge rounded-pill"
                                     style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color);">Brand
                                     Brain</span>
@@ -546,7 +933,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="project-title mb-0">Vinci</h5>
+                                <h3 class="project-title mb-0">Vinci</h3>
                                 <span class="badge rounded-pill"
                                     style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color);">AI
                                     Agency</span>
@@ -587,7 +974,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="project-title mb-0">Remotion Animator</h5>
+                                <h3 class="project-title mb-0">Remotion Animator</h3>
                                 <span class="badge rounded-pill" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); font-size: 0.75rem;">v1.0.5</span>
                             </div>
                             <p class="project-text">A video skill for agents. Build animated videos programmatically. Templates, components, and one-command render to MP4/WebM/ProRes.</p>
@@ -626,7 +1013,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="project-title mb-0">Supertonic TTS</h5>
+                                <h3 class="project-title mb-0">Supertonic TTS</h3>
                                 <span class="badge rounded-pill" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); font-size: 0.75rem;">v1.0.1</span>
                             </div>
                             <p class="project-text">On-device multilingual text-to-speech. Offline WAV generation, 31 languages, custom voice styles. No cloud required.</p>
@@ -647,7 +1034,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="project-title mb-0">Data Chart Builder</h5>
+                                <h3 class="project-title mb-0">Data Chart Builder</h3>
                                 <span class="badge rounded-pill" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); font-size: 0.75rem;">v1.0.0</span>
                             </div>
                             <p class="project-text">Publication-ready charts from any data source. CSV, JSON, FRED API, or inline data. Line, bar, scatter, area-fill, annotations.</p>
@@ -668,7 +1055,7 @@
                         </div>
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="project-title mb-0">FRED Data Viz</h5>
+                                <h3 class="project-title mb-0">FRED Data Viz</h3>
                                 <span class="badge rounded-pill" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); font-size: 0.75rem;">v1.0.0</span>
                             </div>
                             <p class="project-text">Economic comparison charts from Federal Reserve data. Visualize and analyze macroeconomic indicators over time.</p>
@@ -689,7 +1076,7 @@
             <div class="reveal">
                 <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 32px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);" onmouseover="this.style.borderColor='var(--accent-color)'" onmouseout="this.style.borderColor='var(--glass-border)'">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
-                        <h5 style="font-weight:700; font-size:1.1rem; margin:0; line-height:1.4;">Evaluating Top-k RAG-based approach for Game Review Generation</h5>
+                        <h3 style="font-weight:700; font-size:1.1rem; margin:0; line-height:1.4;">Evaluating Top-k RAG-based approach for Game Review Generation</h3>
                         <span class="badge rounded-pill" style="background: rgba(0, 242, 254, 0.1); color: var(--accent-color); border: 1px solid var(--accent-color); white-space:nowrap;">IEEE 2024</span>
                     </div>
                     <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom:12px;">P. Chauhan, R. K. Sahani, S. Datta, A. Qadir, M. Raj and M. M. Ali &mdash; <em>2024 IEEE International Conference on Computing, Power and Communication Technologies (IC2PCT)</em>, Greater Noida, India, pp. 258–263</p>
@@ -712,7 +1099,7 @@
             <div class="reveal">
                 <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 20px; padding: 32px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);" onmouseover="this.style.borderColor='var(--accent-color)'" onmouseout="this.style.borderColor='var(--glass-border)'">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; margin-bottom:16px;">
-                        <h5 style="font-weight:700; font-size:1.1rem; margin:0; line-height:1.4;">Contactless Biometric Authentication System Through Hand Gestures</h5>
+                        <h3 style="font-weight:700; font-size:1.1rem; margin:0; line-height:1.4;">Contactless Biometric Authentication System Through Hand Gestures</h3>
                         <span class="badge rounded-pill" style="background: rgba(79, 172, 254, 0.1); color: var(--accent-secondary); border: 1px solid var(--accent-secondary); white-space:nowrap;">Published</span>
                     </div>
                     <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom:12px;">Applicant: Bennett University &mdash; <em>Indian Patent Office, Computer Science</em></p>
@@ -743,10 +1130,7 @@
         <div class="container text-center">
             <p style="color: var(--text-dim);">© 2025 Pratyush Chauhan.</p>
         </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <script>
+    </footer>    <script>
         // Simple reveal animation on scroll
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
