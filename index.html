@@ -202,6 +202,8 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            overflow-wrap: anywhere;
+            word-break: break-word;
         }
 
         .hero-lead {
@@ -230,6 +232,7 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
+            min-height: 48px;
         }
 
         .btn-primary-modern {
@@ -383,6 +386,8 @@
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
+                overflow-wrap: anywhere;
+                word-break: break-word;
             }
 
             .hero-section {
@@ -509,7 +514,7 @@
                         <div class="project-img-wrapper">
                             <div class="ratio ratio-16x9">
                                 <img src="./engram.png" class="card-img-top object-fit-cover project-img"
-                                    alt="Engram AI">
+                                    alt="Engram Project" loading="lazy">
                             </div>
                         </div>
                         <div class="card-body">
@@ -536,7 +541,7 @@
                     <div class="card project-card">
                         <div class="project-img-wrapper">
                             <div class="ratio ratio-16x9">
-                                <img src="./vinci.png" class="card-img-top object-fit-cover project-img" alt="Vinci AI">
+                                <img src="./vinci.png" class="card-img-top object-fit-cover project-img" alt="Vinci AI" loading="lazy">
                             </div>
                         </div>
                         <div class="card-body">
@@ -637,7 +642,7 @@
                     <div class="card project-card">
                         <div class="project-img-wrapper">
                             <div class="ratio ratio-16x9">
-                                <img src="skills-chart-sample.png" class="card-img-top object-fit-cover project-img" alt="Chart sample" style="background: var(--glass-bg);">
+                                <img src="skills-chart-sample.png" class="card-img-top object-fit-cover project-img" alt="Chart sample" style="background: var(--glass-bg);" loading="lazy">
                             </div>
                         </div>
                         <div class="card-body">
@@ -658,7 +663,7 @@
                     <div class="card project-card">
                         <div class="project-img-wrapper">
                             <div class="ratio ratio-16x9">
-                                <img src="skills-chart-sample.png" class="card-img-top object-fit-cover project-img" alt="FRED chart sample" style="background: var(--glass-bg); filter: hue-rotate(45deg);">
+                                <img src="skills-chart-sample.png" class="card-img-top object-fit-cover project-img" alt="FRED chart sample" style="background: var(--glass-bg); filter: hue-rotate(45deg);" loading="lazy">
                             </div>
                         </div>
                         <div class="card-body">
