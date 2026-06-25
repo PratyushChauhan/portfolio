@@ -30,12 +30,22 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 15% 25%,rgba(0,242,254,.06) 0%,transparent 30%),radial-gradient(circle at 85% 75%,rgba(79,172,254,.04) 0%,transparent 25%);z-index:-1;pointer-events:none}
 
 nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);background:rgba(5,5,5,.8);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
-.nav-brand{font-weight:800;font-size:1.1rem;letter-spacing:-.03em;text-decoration:none;color:var(--text)}
-.nav-back{font-size:.875rem;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.nav-brand{font-weight:800;font-size:1.1rem;letter-spacing:-.03em;text-decoration:none;color:var(--text);min-height:48px;display:flex;align-items:center}
+.nav-back{font-size:.875rem;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s;min-height:48px;padding:.25rem 0}
 .nav-back:hover{color:var(--accent)}
+.nav-toggle{display:none}
+.nav-hamburger{display:none;cursor:pointer;width:28px;height:28px;flex-direction:column;justify-content:center;gap:5px}
+.nav-hamburger span{display:block;height:2px;background:var(--text);border-radius:2px}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+@media(max-width:767px){
+  .nav-hamburger{display:flex}
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:rgba(5,5,5,.95);backdrop-filter:blur(20px);flex-direction:column;align-items:stretch;padding:.5rem 2rem;border-bottom:1px solid var(--border);gap:0;display:none}
+  .nav-toggle:checked ~ .nav-links{display:flex}
+  .nav-back{padding:.65rem 0}
+}
 
 main{max-width:680px;margin:0 auto;padding:4rem 2rem 6rem}
-h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;margin-bottom:.5rem}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;margin-bottom:.5rem;overflow-wrap:anywhere;word-break:break-word}
 h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .subtitle{color:var(--dim);font-size:1rem;margin-bottom:2.5rem}
 
@@ -44,7 +54,7 @@ h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-b
 .dropzone:hover,.dropzone.drag{border-color:var(--accent);background:rgba(0,242,254,.04)}
 .dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .dz-icon{font-size:2.5rem;margin-bottom:.75rem;opacity:.6}
-.dz-label{font-size:1rem;font-weight:600;margin-bottom:.4rem}
+.dz-label{font-size:1rem;font-weight:600;margin-bottom:.4rem;overflow-wrap:anywhere;word-break:break-word}
 .dz-sub{font-size:.875rem;color:var(--dim)}
 
 /* Preview area */
@@ -55,30 +65,42 @@ h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-b
 .pane img,.pane canvas{max-width:100%;border-radius:.75rem;border:1px solid var(--border);display:block}
 
 /* Size selector */
-.controls{display:flex;align-items:center;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap}
-.size-btn{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--dim);font-family:inherit;font-size:.85rem;font-weight:600;padding:.45rem .9rem;cursor:pointer;transition:all .2s}
+.controls{display:flex;align-items:center;gap:.85rem;margin-top:1.5rem;flex-wrap:wrap}
+.size-btn{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--dim);font-family:inherit;font-size:.85rem;font-weight:600;padding:.45rem .9rem;cursor:pointer;transition:all .2s;min-height:48px;display:inline-flex;align-items:center;justify-content:center}
 .size-btn:hover{border-color:var(--accent);color:var(--text)}
 .size-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,242,254,.07)}
 
-.custom-dim{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--text);font-family:inherit;font-size:.85rem;font-weight:600;padding:.45rem .65rem;width:72px;outline:none;transition:border-color .2s}
+.custom-dim{background:var(--surface);border:1px solid var(--border);border-radius:.5rem;color:var(--text);font-family:inherit;font-size:.85rem;font-weight:600;padding:.45rem .75rem;width:72px;outline:none;transition:border-color .2s;min-height:48px}
 .custom-dim:focus{border-color:var(--accent)}
 .custom-dim::placeholder{color:var(--dim)}
 .custom-dim::-webkit-inner-spin-button,.custom-dim::-webkit-outer-spin-button{-webkit-appearance:none}
 
 /* Download button */
-.btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;border-radius:.75rem;color:#050505;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:opacity .2s;text-decoration:none;margin-top:1.5rem}
+.btn-dl{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;border-radius:.75rem;color:#050505;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:opacity .2s;text-decoration:none;margin-top:1.5rem;min-height:48px}
 .btn-dl:hover{opacity:.85}
 .btn-dl svg{flex-shrink:0}
+@media(max-width:767px){
+  main{padding:3rem 1.25rem 4rem}
+  .dropzone{padding:2.5rem 1.25rem}
+}
 </style>
 </head>
 <body>
 
 <nav>
   <a class="nav-brand" href="../index.html">P. CHAUHAN</a>
-  <a class="nav-back" href="index.html">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    All tools
-  </a>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <label for="nav-toggle" class="nav-hamburger" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+  <div class="nav-links">
+    <a class="nav-back" href="index.html">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      All tools
+    </a>
+  </div>
 </nav>
 
 <main>
