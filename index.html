@@ -827,6 +827,23 @@
 </head>
 
 <body>
+    <script>
+        /* Reveal above-fold elements immediately to avoid Lighthouse false-negative */
+        (function() {
+            function revealNow() {
+                var reveals = document.querySelectorAll('.reveal');
+                for (var i = 0; i < reveals.length; i++) {
+                    if (reveals[i].getBoundingClientRect().top < window.innerHeight) {
+                        reveals[i].classList.add('active');
+                    }
+                }
+            }
+            revealNow();
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', revealNow);
+            }
+        })();
+    </script>
     <!-- Navigation -->
     <nav class="site-nav">
         <div class="nav-inner">
