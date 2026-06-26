@@ -416,12 +416,18 @@
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
             min-height: 48px;
         }
 
-        .btn-modern .fas {
-            transform: translateY(4px);
+        .btn-inner {
+            display: inline-block;
+        }
+
+        .btn-inner .fas {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
         }
 
         .btn-primary-modern {
@@ -820,7 +826,6 @@
 
             .btn-modern {
                 width: 100%;
-                justify-content: center;
             }
 
             .social-links {
@@ -1149,7 +1154,19 @@
         }
 
         window.addEventListener("scroll", reveal);
-        window.addEventListener("DOMContentLoaded", reveal);
+        window.addEventListener("DOMContentLoaded", function() {
+            reveal();
+            // Wrap button contents in .btn-inner for reliable text/icon alignment
+            document.querySelectorAll('.btn-modern').forEach(function(btn) {
+                if (btn.querySelector('.btn-inner')) return;
+                var span = document.createElement('span');
+                span.className = 'btn-inner';
+                while (btn.firstChild) {
+                    span.appendChild(btn.firstChild);
+                }
+                btn.appendChild(span);
+            });
+        });
         window.addEventListener("load", reveal);
 
         // Spotlight follows cursor
