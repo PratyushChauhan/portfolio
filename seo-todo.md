@@ -15,14 +15,15 @@
 - [x] Fix blog post visible date mismatch (June 24, 2026 → June 25, 2025)
 - [x] Update sitemap `lastmod` to 2026-06-26
 - [x] Add `og:image` + `twitter:image` meta tags (references `og-default.png`)
+- [x] **Generate `og-default.png`** — 1200×630 share card (deployed 2026-06-27)
+- [x] **Add `defer` to highlight.js** — mobile TBT fixed (deployed 2026-06-27)
+
+### In Progress
+- [ ] **Submit sitemap to Google Search Console** — awaiting verification meta tag from user
 
 ### Blocked / Next
-- [ ] **Generate `og-default.png`** — 1200×630 share card
-  - Template created: `og-image-template.html`
-  - Screenshot at 1200×630 and save as `og-default.png`
 - [ ] **Write 2–3 more blog posts** to build topical authority
 - [ ] **Add images/screenshots** to existing Hermes post (0 images currently)
-- [ ] **Request Google Search Console indexing** for `/portfolio/blog/`
 
 ### Backlog
 - [ ] Per-post OG images (automated from title + tag)
