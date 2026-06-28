@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Supertonic Narrator</title>
+  <title>Supertonic Narrator v3</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      width: 180px;
+      width: 220px;
       padding: 16px;
-      font-family: system-ui, sans-serif;
-      background: #0a0a0a;
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: #050505;
       color: #e0e0e0;
     }
     .title {
@@ -18,13 +18,26 @@
       font-weight: 600;
       color: #00f2fe;
       margin-bottom: 12px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .status {
       font-size: 11px;
       text-align: center;
       color: #888;
+      margin-bottom: 8px;
+      min-height: 16px;
+    }
+    .status.buffering { color: #ffc107; }
+    .status.playing { color: #00f2fe; }
+    .status.error { color: #ff4757; }
+    .meta {
+      font-size: 9px;
+      color: #555;
+      text-align: center;
       margin-bottom: 12px;
+      font-family: monospace;
     }
     .btns {
       display: flex;
@@ -41,26 +54,76 @@
       background: #1a1a1a;
       color: #fff;
       border: 1px solid #333;
+      transition: all 0.2s;
     }
     button:hover { background: #222; }
     button.stop { background: #ff4757; border-color: #ff4757; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .controls {
+      margin: 12px 0;
+    }
+    .control {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .control label {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    .control select, .control input {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: #e0e0e0;
+      border-radius: 3px;
+      padding: 3px 6px;
+      font-size: 11px;
+    }
     .note {
       font-size: 9px;
-      color: #555;
+      color: #444;
       text-align: center;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="title">● Narrator</div>
+  <div class="title">● Narrator v3</div>
   <div class="status" id="status">Idle</div>
+  <div class="meta" id="meta"></div>
+
+  <div class="controls">
+    <div class="control">
+      <label>Voice</label>
+      <select id="voice">
+        <option value="M1">M1 (Default)</option>
+        <option value="M2">M2</option>
+        <option value="M3">M3</option>
+        <option value="M4">M4</option>
+        <option value="M5">M5</option>
+        <option value="F1">F1</option>
+        <option value="F2">F2</option>
+        <option value="F3">F3</option>
+        <option value="F4">F4</option>
+        <option value="F5">F5</option>
+      </select>
+    </div>
+    <div class="control">
+      <label>Speed</label>
+      <input type="range" id="speed" min="0.7" max="2.0" step="0.1" value="1.0" style="width:70px">
+    </div>
+  </div>
+
   <div class="btns">
     <button id="play">▶</button>
     <button id="pause">⏸</button>
     <button id="stop" class="stop">⏹</button>
   </div>
-  <div class="note">v1 — Web Speech</div>
+
+  <div class="note">v3 — Single-stream TTS via self-hosted API</div>
+
   <script src="popup.js"></script>
 </body>
 </html>

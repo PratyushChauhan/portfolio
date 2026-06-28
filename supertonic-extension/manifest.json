@@ -2,17 +2,15 @@
   "manifest_version": 3,
   "name": "Supertonic Narrator",
   "short_name": "STNarrator",
-  "version": "2.0.0",
-  "description": "On-device Supertonic TTS narration. v2 runs ONNX models locally via ts-voice.",
+  "version": "3.0.0",
+  "description": "On-device Supertonic TTS narration. v3 uses single-stream HTTP fetching with progressive playback.",
   "permissions": [
     "activeTab",
     "storage",
     "offscreen"
   ],
   "host_permissions": [
-    "https://unpkg.com/*",
-    "https://cdn.jsdelivr.net/*",
-    "https://huggingface.co/*"
+    "https://ciphersserver.tail667d54.ts.net/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -37,8 +35,5 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' https://unpkg.com https://cdn.jsdelivr.net; object-src 'self'; connect-src 'self' https://unpkg.com https://cdn.jsdelivr.net https://huggingface.co"
   }
 }

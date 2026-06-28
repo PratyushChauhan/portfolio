@@ -1,4 +1,4 @@
-/* content.js — v2: Supertonic TTS with sentence progress and skip */
+/* content.js — v3: Narrator controls + text extraction */
 
 (() => {
   'use strict';
@@ -35,14 +35,6 @@
     <span class="stn-label">Narrate</span>
   `;
 
-  const btnSkip = document.createElement('button');
-  btnSkip.id = 'stn-skip';
-  btnSkip.innerHTML = `
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-  `;
-  btnSkip.title = 'Skip sentence';
-  btnSkip.style.display = 'none';
-
   const btnStop = document.createElement('button');
   btnStop.id = 'stn-stop';
   btnStop.innerHTML = `
@@ -53,23 +45,31 @@
 
   container.appendChild(progress);
   container.appendChild(btnPlay);
-  container.appendChild(btnSkip);
   container.appendChild(btnStop);
   document.documentElement.appendChild(container);
 
   // --- Actions ---
   function updateState(state, meta) {
-    if (state === 'playing') {
+    if (state === 'buffering') {
       btnPlay.querySelector('#stn-icon-play').style.display = 'none';
       btnPlay.querySelector('#stn-icon-pause').style.display = 'inline';
-      btnPlay.querySelector('.stn-label').textContent = meta ? `${meta.current}/${meta.total}` : 'Playing';
+      btnPlay.querySelector('.stn-label').textContent = 'Buffering';
       btnPlay.classList.add('stn-playing');
-      btnSkip.style.display = 'flex';
       btnStop.style.display = 'flex';
       progress.style.display = 'block';
-      if (meta && meta.total) {
-        const pct = (meta.current / meta.total) * 100;
-        progress.style.background = `linear-gradient(90deg, #00f2fe ${pct}%, #1a1a1a ${pct}%)`;
+      progress.style.background = 'linear-gradient(90deg, #ffc107 30%, #1a1a1a 30%)';
+    } else if (state === 'playing') {
+      btnPlay.querySelector('#stn-icon-play').style.display = 'none';
+      btnPlay.querySelector('#stn-icon-pause').style.display = 'inline';
+      btnPlay.querySelector('.stn-label').textContent = meta?.bytesReceived
+        ? `${(meta.bytesReceived / 1024).toFixed(0)} KB`
+        : 'Playing';
+      btnPlay.classList.add('stn-playing');
+      btnStop.style.display = 'flex';
+      progress.style.display = 'block';
+      if (meta?.bytesReceived) {
+        // Animate progress based on download progress (rough estimate)
+        progress.style.background = `linear-gradient(90deg, #00f2fe 60%, #1a1a1a 60%)`;
       }
     } else if (state === 'paused') {
       btnPlay.querySelector('#stn-icon-play').style.display = 'inline';
@@ -80,47 +80,44 @@
       btnPlay.querySelector('#stn-icon-pause').style.display = 'none';
       btnPlay.classList.remove('stn-playing');
       btnPlay.querySelector('.stn-label').textContent = 'Narrate';
-      btnSkip.style.display = 'none';
       btnStop.style.display = 'none';
       progress.style.display = 'none';
       progress.style.background = '#1a1a1a';
     }
   }
 
-  btnPlay.addEventListener('click', async () => {
+  btnPlay.addEventListener('click', () => {
     const text = extractText();
     if (!text || text.length < 20) {
       btnPlay.querySelector('.stn-label').textContent = 'No text';
       setTimeout(() => btnPlay.querySelector('.stn-label').textContent = 'Narrate', 1500);
       return;
     }
-
-    chrome.runtime.sendMessage({ action: 'getState' }, (r) => {
-      if (r.speaking) {
-        chrome.runtime.sendMessage({ action: 'pause' });
-      } else if (r.paused) {
-        chrome.runtime.sendMessage({ action: 'resume' });
-      } else {
-        chrome.runtime.sendMessage({ action: 'speak', text });
-      }
-    });
-  });
-
-  btnSkip.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: 'skip' });
+    chrome.runtime.sendMessage({ action: 'speak', text });
   });
 
   btnStop.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: 'stop' });
   });
 
-  // --- Listen for state updates ---
+  // Listen for state updates
   chrome.runtime.onMessage.addListener((msg) => {
     if (msg.action === 'state') {
       updateState(msg.state, msg.meta);
     }
     if (msg.action === 'extract') {
-      // Handled by popup
+      // Respond to popup's extract request
+      const text = extractText();
+      if (msg && typeof msg === 'object' && msg._sendResponse) {
+        // Not how it works — sendResponse is separate
+      }
+    }
+  });
+
+  // Handle direct extract requests from popup
+  chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+    if (req.action === 'extract') {
+      sendResponse({ text: extractText() });
     }
   });
 })();
