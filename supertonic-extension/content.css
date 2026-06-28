@@ -1,0 +1,85 @@
+/* content.css — v2: Narrator controls with progress bar, skip, stop */
+
+#stn-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+#stn-progress {
+  width: 180px;
+  height: 4px;
+  border-radius: 2px;
+  background: #1a1a1a;
+  transition: background 0.3s;
+}
+
+#stn-narrator, #stn-skip, #stn-stop {
+  background: #00f2fe;
+  color: #050505;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0, 242, 254, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  line-height: 1;
+}
+
+#stn-narrator:hover, #stn-skip:hover, #stn-stop:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 242, 254, 0.5);
+}
+
+#stn-narrator.stn-playing {
+  background: #ff4757;
+  box-shadow: 0 4px 20px rgba(255, 71, 87, 0.3);
+  animation: stn-pulse 1.5s ease-in-out infinite;
+}
+#stn-narrator.stn-playing:hover {
+  box-shadow: 0 6px 24px rgba(255, 71, 87, 0.5);
+}
+
+#stn-skip, #stn-stop {
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  color: #00f2fe;
+  border: 1px solid #333;
+}
+#stn-skip:hover, #stn-stop:hover {
+  background: #222;
+  box-shadow: 0 4px 16px rgba(0, 242, 254, 0.15);
+}
+#stn-stop {
+  color: #ff4757;
+  border-color: #ff475744;
+}
+#stn-stop:hover {
+  box-shadow: 0 4px 16px rgba(255, 71, 87, 0.15);
+}
+
+@keyframes stn-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@media (max-width: 400px) {
+  .stn-label { display: none; }
+  #stn-narrator { padding: 12px; border-radius: 50%; }
+  #stn-progress { width: 120px; }
+}
