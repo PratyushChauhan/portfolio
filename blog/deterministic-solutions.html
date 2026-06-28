@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Why deterministic computing matters more than ever in the age of generative AI. If we lose predictability, we lose the foundation reliable systems are built on.">
+<meta name="author" content="Pratyush Chauhan">
+<link rel="canonical" href="https://pratyushchauhan.github.io/portfolio/blog/deterministic-solutions.html">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pratyushchauhan.github.io/portfolio/blog/deterministic-solutions.html">
+<meta property="og:title" content="Now More Than Ever, Why Do We Need Deterministic Solutions?">
+<meta property="og:description" content="Why deterministic computing matters more than ever in the age of generative AI. If we lose predictability, we lose the foundation reliable systems are built on.">
+<meta property="og:image" content="https://pratyushchauhan.github.io/portfolio/og-default.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://pratyushchauhan.github.io/portfolio/blog/deterministic-solutions.html">
+<meta name="twitter:title" content="Now More Than Ever, Why Do We Need Deterministic Solutions?">
+<meta name="twitter:description" content="Why deterministic computing matters more than ever in the age of generative AI. If we lose predictability, we lose the foundation reliable systems are built on.">
+<meta name="theme-color" content="#050505">
+<title>Now More Than Ever, Why Do We Need Deterministic Solutions? — Pratyush Chauhan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="../favicon.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Now More Than Ever, Why Do We Need Deterministic Solutions?",
+  "author": {
+    "@type": "Person",
+    "name": "Pratyush Chauhan"
+  },
+  "datePublished": "2025-06-28",
+  "url": "https://pratyushchauhan.github.io/portfolio/blog/deterministic-solutions.html",
+  "description": "Why deterministic computing matters more than ever in the age of generative AI. If we lose predictability, we lose the foundation reliable systems are built on."
+}
+</script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050505;--surface:rgba(255,255,255,.03);--surface-hover:rgba(255,255,255,.06);--border:rgba(255,255,255,.08);
+  --text:#f0f2f5;--text-heading:#fff;--dim:#a0a0a0;--dimmer:#6b7280;
+  --accent:#00f2fe;--accent2:#4facfe;--accent-soft:rgba(0,242,254,.08);
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100dvh;overflow-x:hidden;letter-spacing:-.01em;line-height:1.7;font-size:1.05rem}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at 15% 25%,rgba(0,242,254,.05) 0%,transparent 30%),radial-gradient(circle at 85% 75%,rgba(79,172,254,.03) 0%,transparent 25%);z-index:-1;pointer-events:none}
+
+/* Nav */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 2rem;border-bottom:1px solid var(--border);background:rgba(5,5,5,.8);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10}
+.nav-brand{font-weight:800;font-size:1.1rem;letter-spacing:-.03em;text-decoration:none;color:var(--text-heading)}
+.nav-links{display:flex;align-items:center;gap:1.5rem}
+.nav-link{font-size:.875rem;color:var(--dim);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.nav-link:hover{color:var(--accent)}
+.nav-toggle-label{display:none;cursor:pointer;padding:.5rem}
+.nav-toggle-label span,.nav-toggle-label span::before,.nav-toggle-label span::after{display:block;background:var(--text);height:2px;width:24px;border-radius:2px;position:relative}
+.nav-toggle-label span::before,.nav-toggle-label span::after{content:'';position:absolute}
+.nav-toggle-label span::before{top:-7px}
+.nav-toggle-label span::after{top:7px}
+.nav-link{min-height:48px}
+
+/* Article layout */
+article{max-width:760px;margin:0 auto;padding:4rem 1.5rem 6rem}
+
+/* Post header */
+.post-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.post-meta{display:flex;gap:.75rem;align-items:center;font-size:.85rem;color:var(--dim);margin-bottom:1rem;flex-wrap:wrap}
+.post-tag{font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .65rem;border-radius:.35rem;background:rgba(0,242,254,.08);border:1px solid rgba(0,242,254,.2);color:var(--accent)}
+.post-title{font-size:clamp(1.8rem,5vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--text-heading);margin-bottom:1rem}
+.post-subtitle{font-size:1.15rem;color:var(--dim);font-weight:300;line-height:1.5}
+
+/* Typography */
+h1{font-size:2rem;font-weight:800;letter-spacing:-.02em;color:var(--text-heading);margin:2.5rem 0 1rem;line-height:1.25}
+h2{font-size:1.6rem;font-weight:700;letter-spacing:-.015em;color:var(--text-heading);margin:2.2rem 0 .9rem;line-height:1.3;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+h3{font-size:1.25rem;font-weight:700;color:var(--text-heading);margin:1.8rem 0 .7rem;line-height:1.35}
+h4{font-size:1.1rem;font-weight:600;color:var(--text-heading);margin:1.4rem 0 .5rem}
+p{margin-bottom:1.2rem}
+strong{color:var(--text-heading);font-weight:600}
+
+/* Links */
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,242,254,.25);transition:border-color .2s}
+a:hover{border-bottom-color:var(--accent)}
+
+/* Lists */
+ul,ol{margin:1rem 0 1.2rem 1.5rem}
+li{margin-bottom:.5rem}
+ul li::marker{color:var(--dim)}
+
+/* Code */
+code{font-family:'SF Mono',Menlo,Monaco,'Courier New',monospace;font-size:.9em;background:var(--surface);padding:.15rem .4rem;border-radius:.3rem;color:#e2e8f0;border:1px solid var(--border)}
+pre{background:#0d1117;border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;overflow-x:auto;max-width:100%;margin:1.2rem 0;font-size:.88rem;line-height:1.6}
+pre code{background:none;padding:0;border:none;font-size:inherit;color:inherit}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.95rem}
+th,td{padding:.65rem .9rem;text-align:left;border-bottom:1px solid var(--border)}
+th{font-weight:600;color:var(--text-heading);background:var(--surface);font-size:.85rem;letter-spacing:.02em;text-transform:uppercase}
+tr:hover td{background:var(--surface-hover)}
+
+/* Blockquotes */
+blockquote{border-left:3px solid var(--accent);padding-left:1.25rem;margin:1.5rem 0;color:var(--dim);font-style:italic}
+
+/* Horizontal rules */
+hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
+
+/* Section numbers / callouts */
+.callout{background:var(--surface);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem 1.5rem;margin:1.5rem 0}
+.callout-title{font-weight:700;color:var(--text-heading);margin-bottom:.4rem;font-size:1.05rem}
+
+/* Footer */
+.footer{text-align:center;padding:3rem 1.5rem;color:var(--dim);font-size:.85rem;border-top:1px solid var(--border);margin-top:auto}
+.footer a{color:var(--dim);border:none}
+.footer a:hover{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:767px){
+  .nav-toggle-label{display:flex;align-items:center;justify-content:center;min-height:48px;min-width:48px}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(5,5,5,.95);backdrop-filter:blur(20px);padding:1rem 2rem;border-bottom:1px solid var(--border);flex-direction:column;gap:.75rem;align-items:flex-start}
+  #nav-toggle:checked ~ .nav-links{display:flex}
+  .nav-link{padding:.75rem 0}
+  .post-tag{min-height:48px;display:inline-flex;align-items:center}
+}
+@media(max-width:640px){
+ article{padding:2.5rem 1rem 4rem}
+ h1{font-size:1.6rem}
+ h2{font-size:1.3rem}
+  .post-title{font-size:1.6rem}
+  nav{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+ <a class="nav-brand" href="../index.html">P. CHAUHAN</a>
+  <input type="checkbox" id="nav-toggle" style="display:none">
+  <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle navigation"><span></span></label>
+  <div class="nav-links">
+   <a class="nav-link" href="../blog/index.html">
+     <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     All posts
+   </a>
+   <a class="nav-link" href="../index.html">
+     <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+     Portfolio
+   </a>
+ </div>
+</nav>
+
+<article>
+
+<header class="post-header">
+  <div class="post-meta">
+    <span class="post-tag">Systems</span>
+    <span>June 28, 2025</span>
+    <span>&middot; 7 min read</span>
+  </div>
+  <h1 class="post-title">Now More Than Ever, Why Do We Need Deterministic Solutions?</h1>
+  <p class="post-subtitle">Generative AI made stochastic computing mainstream. It also made predictability a scarce resource. Rebuilding deterministic foundations is not nostalgia. It is the next necessary investment.</p>
+</header>
+
+<h2 id="the-shift">1. The Shift</h2>
+<p>For decades, determinism was the default assumption of software engineering. A function with the same inputs returned the same outputs. A deployment with the same artifact produced the same environment. A test with the same seed produced the same result. This contract underpinned debugging, caching, distributed consensus, and regulatory compliance.</p>
+
+<p>Then generative AI moved stochasticity from the training room to the user interface. Large language models turned <code>temperature</code> and <code>top_p</code> into normal engineering knobs. Output variance, once an internal detail of gradient descent, became a visible feature. We began accepting that the same prompt might yield three different answers, that a configuration file could be <em>approximately</em> correct, that an agent might choose different tools on consecutive runs.</p>
+
+<p>This flexibility is powerful. It is also corrosive when it leaks into layers that should be exact.</p>
+
+<h2 id="the-cost">2. Where Non-Determinism Becomes Expensive</h2>
+<p>The problem is not stochasticity itself. The problem is <strong>unbounded</strong> stochasticity — variance without guardrails in systems where predictability is a safety property, not a convenience.</p>
+
+<h3 id="infrastructure">Infrastructure and Orchestration</h3>
+<p>Consider a Kubernetes cluster, a CI/CD pipeline, or a Terraform plan. These systems are built on the assumption that the same configuration produces the same state. If an LLM-generated YAML file varies slightly between runs — a port number shifts, an environment variable drifts, an init script reorders — the result is not "creative output." It is an incident waiting to happen.</p>
+
+<p>Tooling that synthesizes infrastructure from natural language must either be fully deterministic (same prompt, same manifest) or explicitly versioned (the operator reviews and pins). Anything in between is technical debt.</p>
+
+<h3 id="debugging">Debugging and Observability</h3>
+<p>Debugging a distributed system requires reproducibility. If you run a failing job twice and get different traces because an agentic loop chose different tool calls, you lose the ability to bisect. The most powerful debugging technique — running the same system with the same inputs — requires the system to be deterministic.</p>
+
+<p>Agentic frameworks compound this. Each decision point (which tool, which parameters, in what order) branches the state space. Without deterministic replay, a failure in production becomes a story you tell, not a bug you fix.</p>
+
+<h3 id="security">Security and Trust Boundaries</h3>
+<p>Non-determinism creates side channels. If a system's output varies with the same credentials and the same request, that variance can leak information about internal state, model versions, or prompt structure. More pragmatically, if a security review depends on manually auditing a generated firewall rule or IAM policy, and the generation is not reproducible, the review is valid for one instant in time — not for the deployed artifact.</p>
+
+<h2 id="the-illusion">3. The Illusion of Good Enough</h2>
+<p>Modern LLMs create a compelling average case. The 95th percentile response is coherent, structured, and correct enough. But systems engineering is not about the 95th percentile. It is about the <strong>tail</strong>. The 5th percentile failure mode of a stochastic system can be catastrophic: a subtly wrong SQL query that corrupts data, a misrouted API call that triggers a cascade, a generated configuration that opens a port to 0.0.0.0/0.</p>
+
+<p>When we measure these systems by aggregate benchmarks — token-level accuracy, MT-bench scores, win rates — we optimize for the wrong distribution. Production systems fail at edge cases, not medians.</p>
+
+<h2 id="determinism-lives">4. Where Determinism Still Lives</h2>
+<p>Deterministic computing never went away. It simply became invisible — the substrate beneath the stochastic layer. Several domains have quietly resisted the trend:</p>
+
+<table>
+<thead>
+<tr><th>Domain</th><th>Deterministic Guarantee</th><th>Why It Matters</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>SQLite</strong></td><td>Bit-exact test outputs across architectures</td><td>Allows verification of the entire state machine with <code>make test</code></td></tr>
+<tr><td><strong>Deterministic Simulation Testing</strong></td><td>Reproducible distributed failure scenarios</td><td>FoundationDB-style exhaustive fault injection</td></tr>
+<tr><td><strong>CRDTs</strong></td><td>Convergence to identical state regardless of operation order</td><td>Offline-first collaborative editing without server coordination</td></tr>
+<tr><td><strong>Compiler Design</strong></td><td>Identical AST from identical source</td><td>Build caching, reproducible binaries, security auditing</td></tr>
+<tr><td><strong>Consensus Protocols</strong></td><td>Raft / Paxos guarantee same committed log</td><td>Distributed state machines cannot fork on disagreement</td></tr>
+</tbody>
+</table>
+
+<p>These systems are not boring. They are <strong>hard</strong>. Building deterministic concurrent or distributed systems requires formal reasoning, exhaustive testing, and often, sacrificing raw performance for predictability. But the result is infrastructure you can reason about.</p>
+
+<h2 id="hybrid">5. A Practical Hybrid Model</h2>
+<p>The answer is not to ban stochastic models from production. The answer is to <strong>bound</strong> them. A reliable architecture separates the creative layer from the critical layer:</p>
+
+<table>
+<thead>
+<tr><th>Layer</th><th>Suitable Approach</th><th>Examples</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>Creative / Synthesis</strong></td><td>Stochastic (LLMs)</td><td>Drafting documentation, generating test data, UI copy, summarization</td></tr>
+<tr><td><strong>Transform / Enrich</strong></td><td>Deterministic with stochastic input</td><td>Structured extraction (constrained decoding), routing decisions, classification with threshold guards</td></tr>
+<tr><td><strong>Critical / Execute</strong></td><td>Fully deterministic</td><td>State mutations, financial transactions, infrastructure changes, access control</td></tr>
+</tbody>
+</table>
+
+<p>The critical layer should never depend on an LLM to decide what to do. It may depend on an LLM to suggest, summarize, or explain — but the decision itself should be a deterministic function of validated inputs.</p>
+
+<p>Constraining the output helps. JSON schemas, constrained decoding, grammar-based generation, and tool-call specifications all push the boundary: they use a stochastic engine to produce deterministic structure. This is a useful intermediate, but it is not the same as end-to-end determinism. The model can still hallucinate a <code>user_id</code> or invent a parameter name.</p>
+
+<h2 id="the-future">6. Building Deterministic Agents</h2>
+<p>The current generation of AI agents is largely stochastic. They plan, reason, choose tools, and execute in a single probabilistic soup. This makes them flexible and sometimes impressive. It also makes them impossible to regression-test.</p>
+
+<p>The next generation will separate <strong>planning</strong> from <strong>execution</strong>:</p>
+<ul>
+<li><strong>Planning</strong> can be stochastic. An LLM proposes a sequence of steps to solve a problem. This is creative work.</li>
+<li><strong>Execution</strong> must be deterministic. Each step is validated, versioned, and run through a deterministic interpreter. If step 3 fails, you replay from step 1 with the same plan.</li>
+</ul>
+
+<p>This is how traditional software already works. A compiler is stochastic in optimization heuristics but deterministic in emitted assembly. A database query planner explores a search space probabilistically but executes the chosen plan transactionally. We should apply the same discipline to agents.</p>
+
+<h2 id="investment">7. The Necessary Investment</h2>
+<p>Choosing determinism is choosing to invest in:</p>
+<ul>
+<li><strong>Reproducibility</strong> — The ability to run the exact same computation twice and compare</li>
+<li><strong>Bisection</strong> — The ability to find when a system changed by binary-searching inputs</li>
+<li><strong>Auditing</strong> — The ability to prove what a system did, not just observe what it probably did</li>
+<li><strong>Composability</strong> — The ability to stack systems without compounding variance</li>
+</ul>
+
+<p>These properties are not retro. They are the foundation of every system that has ever scaled reliably. The current enthusiasm for stochastic AI should not obscure the fact that the internet, banking, aviation, and power grids run on deterministic logic. When generative AI touches those systems, it does so through deterministic interfaces.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>We need deterministic solutions now more than ever because we are building more layers on top of less predictable ones. The stochastic layer is here to stay, and it is valuable. But it must rest on a deterministic foundation. Every time an LLM writes code, generates a config, or proposes a sequence of actions, the output should pass through a deterministic gate before it mutates state.</p>
+
+<p>The craft is not in choosing between determinism and stochasticity. It is in knowing exactly where the boundary belongs — and defending it.</p>
+
+<hr>
+
+<p style="color:var(--dim);font-size:.95rem;margin-top:3rem"></p>
+
+</article>
+
+<div class="footer">
+  <a href="../blog/index.html">&#8592; All posts</a> &nbsp;&middot;&nbsp; <a href="../index.html">Portfolio &#8594;</a>
+</div>
+
+</body>
+</html>
