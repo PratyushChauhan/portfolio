@@ -194,11 +194,11 @@ hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
 <tr><th>Domain</th><th>Deterministic Guarantee</th><th>Why It Matters</th></tr>
 </thead>
 <tbody>
-<tr><td><strong>SQLite</strong></td><td>Bit-exact test outputs across architectures</td><td>Allows verification of the entire state machine with <code>make test</code></td></tr>
-<tr><td><strong>Deterministic Simulation Testing</strong></td><td>Reproducible distributed failure scenarios</td><td>FoundationDB-style exhaustive fault injection</td></tr>
-<tr><td><strong>CRDTs</strong></td><td>Convergence to identical state regardless of operation order</td><td>Offline-first collaborative editing without server coordination</td></tr>
+<tr><td><strong>SQLite</strong> <a href="#ref-1">[1]</a></td><td>Bit-exact test outputs across architectures</td><td>Allows verification of the entire state machine with <code>make test</code></td></tr>
+<tr><td><strong>Deterministic Simulation Testing</strong> <a href="#ref-2">[2]</a></td><td>Reproducible distributed failure scenarios</td><td>FoundationDB-style exhaustive fault injection</td></tr>
+<tr><td><strong>CRDTs</strong> <a href="#ref-3">[3]</a></td><td>Convergence to identical state regardless of operation order</td><td>Offline-first collaborative editing without server coordination</td></tr>
 <tr><td><strong>Compiler Design</strong></td><td>Identical AST from identical source</td><td>Build caching, reproducible binaries, security auditing</td></tr>
-<tr><td><strong>Consensus Protocols</strong></td><td>Raft / Paxos guarantee same committed log</td><td>Distributed state machines cannot fork on disagreement</td></tr>
+<tr><td><strong>Consensus Protocols</strong> <a href="#ref-4">[4]</a> <a href="#ref-5">[5]</a></td><td>Raft / Paxos guarantee same committed log</td><td>Distributed state machines cannot fork on disagreement</td></tr>
 </tbody>
 </table>
 
@@ -250,6 +250,20 @@ hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
 <p>The craft is not in choosing between determinism and stochasticity. It is in knowing exactly where the boundary belongs — and defending it.</p>
 
 <hr>
+
+<h2 id="references">References</h2>
+
+<ol>
+<li id="ref-1">Hipp, D. R., Kennedy, D., & Mistachkin, J. (2020). <em>SQLite</em>. sqlite.org. <a href="https://www.sqlite.org/testing.html" target="_blank" rel="noopener">sqlite.org/testing.html</a> — "100% branch test coverage" and bit-exact output across platforms.</li>
+
+<li id="ref-2">FoundationDB Team. (2013). <em>FoundationDB: A Fault-Tolerant, Distributed Key-Value Store</em>. FoundationDB, later acquired by Apple. <a href="https://www.foundationdb.org/files/fdb-paper.pdf" target="_blank" rel="noopener">fdb-paper.pdf</a> — Deterministic simulation testing of distributed systems.</li>
+
+<li id="ref-3">Shapiro, M., Preguiça, N., Baquero, C., & Zawirski, M. (2011). <em>A comprehensive study of Convergent and Commutative Replicated Data Types</em>. INRIA Research Report 7506. <a href="https://hal.inria.fr/inria-00555588/document" target="_blank" rel="noopener">hal.inria.fr/inria-00555588</a></li>
+
+<li id="ref-4">Ongaro, D., & Ousterhout, J. (2014). <em>In Search of an Understandable Consensus Algorithm</em>. USENIX ATC '14. <a href="https://web.stanford.edu/~ouster/cgi-bin/papers/raft-atc14" target="_blank" rel="noopener">raft-atc14</a></li>
+
+<li id="ref-5">Lamport, L. (1998). <em>The Part-Time Parliament</em>. ACM Transactions on Computer Systems, 16(2). <a href="https://www.microsoft.com/en-us/research/publication/part-time-parliament/" target="_blank" rel="noopener">microsoft.com/research</a></li>
+</ol>
 
 <p style="color:var(--dim);font-size:.95rem;margin-top:3rem"></p>
 

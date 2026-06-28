@@ -247,7 +247,7 @@ hr{border:none;height:1px;background:var(--border);margin:2.5rem 0}
 
 <p><strong>Limits &amp; safeguards:</strong></p>
 <ul>
-<li>Max 32,768 UTF-8 characters — content above this automatically skips to the fallback path</li>
+<li>Max 32,768 UTF-8 characters <a href="#ref-1">[1]</a> — content above this automatically skips to the fallback path</li>
 <li>If Telegram rejects the payload (older <code>python-telegram-bot</code>, parser error, oversized blocks), it <strong>transparently falls back</strong> to MarkdownV2</li>
 <li>Transient/network errors are <strong>not silently retried</strong> — avoids duplicate final messages</li>
 <li>A known TDesktop crash with math-inside-details blocks is detected and routed to fallback</li>
@@ -422,6 +422,14 @@ def _escape_mdv2(text: str) -> str:
 <hr>
 
 <p style="color:var(--dim);font-size:.95rem;margin-top:3rem">Case study compiled from live source inspection of the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> codebase. Hermes is a personal AI agent platform by <a href="https://nousresearch.com/">Nous Research</a>.</p>
+
+<h2 id="references">References</h2>
+
+<ol>
+<li id="ref-1">Telegram. (2025). <em>Bot API Documentation — Sending Rich Messages</em>. <a href="https://core.telegram.org/api/richtext" target="_blank" rel="noopener">core.telegram.org/api/richtext</a> — 32,768 UTF-8 character limit for rich message payloads.</li>
+
+<li id="ref-2">Nous Research. (2025). <em>Hermes Agent</em>. GitHub Repository. <a href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener">github.com/NousResearch/hermes-agent</a> — Source code for gateway/platforms/telegram.py and related modules cited in this case study.</li>
+</ol>
 
 </article>
 
