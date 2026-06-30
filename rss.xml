@@ -2,17 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog — Pratyush Chauhan</title>
-    <link>https://pratyushchauhan.com/blog/</link>
+    <link>https://blog.pratyushchauhan.com/</link>
     <description>Notes on systems, AI, and building things.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 25 Jun 2025 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://pratyushchauhan.com/rss.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How Hermes Formats Telegram Messages So Well</title>
-      <link>https://pratyushchauhan.com/blog/hermes-telegram-formatting.html</link>
-      <guid>https://pratyushchauhan.com/blog/hermes-telegram-formatting.html</guid>
-      <pubDate>Wed, 25 Jun 2025 00:00:00 GMT</pubDate>
+      <link>https://blog.pratyushchauhan.com/hermes-telegram-formatting.html</link>
+      <guid>https://blog.pratyushchauhan.com/hermes-telegram-formatting.html</guid>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>A deep case study on how Hermes Agent converts Markdown to native Telegram formatting — tables, code blocks, bold, italic, and more.</description>
+    </item>
+    <item>
+      <title>Now More Than Ever, Why Do We Need Deterministic Solutions?</title>
+      <link>https://blog.pratyushchauhan.com/deterministic-solutions.html</link>
+      <guid>https://blog.pratyushchauhan.com/deterministic-solutions.html</guid>
+      <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Why deterministic computing matters more than ever in the age of generative AI. If we lose predictability, we lose the foundation reliable systems are built on.</description>
     </item>
   </channel>
 </rss>
