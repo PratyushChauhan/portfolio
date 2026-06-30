@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supertonic Narrator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 180px;
+      padding: 16px;
+      font-family: system-ui, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+    }
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #00f2fe;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .status {
+      font-size: 11px;
+      text-align: center;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .btns {
+      display: flex;
+      gap: 6px;
+    }
+    button {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #1a1a1a;
+      color: #fff;
+      border: 1px solid #333;
+    }
+    button:hover { background: #222; }
+    button.stop { background: #ff4757; border-color: #ff4757; }
+    .note {
+      font-size: 9px;
+      color: #555;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">● Narrator</div>
+  <div class="status" id="status">Idle</div>
+  <div class="btns">
+    <button id="play">▶</button>
+    <button id="pause">⏸</button>
+    <button id="stop" class="stop">⏹</button>
+  </div>
+  <div class="note">v1 — Web Speech</div>
+  <script src="popup.js"></script>
+</body>
+</html>
