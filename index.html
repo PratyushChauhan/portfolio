@@ -741,9 +741,12 @@
                 <div class="col-md-6 col-lg-6 reveal" style="transition-delay: 0.3s;">
                     <div class="card project-card">
                         <div class="project-img-wrapper">
-                            <div class="ratio ratio-16x9">
-                                <img src="./sumeru.png" class="card-img-top object-fit-cover project-img"
-                                    alt="SumeruProject" loading="lazy">
+                            <div class="ratio ratio-1x1">
+                                <video id="reel-card-video" class="card-img-top object-fit-cover project-img"
+                                    src="./sumeru-reel-card.mp4" poster="./sumeru-reel-card-poster.jpg"
+                                    autoplay muted loop playsinline preload="auto" disablepictureinpicture
+                                    aria-label="Sumeru launch reel — click to watch with sound"
+                                    onclick="openReelModal(event)" style="cursor: pointer;"></video>
                             </div>
                         </div>
                         <div class="card-body">
@@ -1015,6 +1018,16 @@
         document.addEventListener('keydown', function(ev) {
             if (ev.key === 'Escape') { closeReelModal(); }
         });
+
+        // respect reduced motion: hold the poster instead of the autoplaying loop
+        (function () {
+            var v = document.getElementById('reel-card-video');
+            if (!v) { return; }
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                v.removeAttribute('autoplay');
+                try { v.pause(); } catch (e) { /* noop */ }
+            }
+        })();
     </script>
 
     <!-- Sumeru reel modal -->
