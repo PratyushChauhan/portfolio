@@ -597,6 +597,19 @@
             }
         }
     </style>
+
+    <!-- Sumeru reel lightbox -->
+    <style>
+        #reel-modal { position: fixed; inset: 0; z-index: 9999; display: none;
+            align-items: center; justify-content: center;
+            background: rgba(3, 5, 8, 0.92); padding: 24px; }
+        #reel-modal.open { display: flex; }
+        #reel-modal video { max-height: 88vh; max-width: 92vw; border-radius: 16px;
+            background: #050608; box-shadow: 0 30px 90px rgba(0,0,0,0.6); }
+        #reel-modal .reel-close { position: absolute; top: 18px; right: 24px;
+            background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color);
+            border-radius: 999px; width: 44px; height: 44px; font-size: 18px; cursor: pointer; }
+    </style>
 </head>
 
 <body>
@@ -752,6 +765,11 @@
                                     class="btn-modern btn-outline-modern py-2 px-4" style="font-size: 0.9rem;">
                                     Docs
                                 </a>
+                                <button type="button" class="btn-modern btn-outline-modern py-2 px-4"
+                                    style="font-size: 0.9rem;" aria-label="Watch the Sumeru reel"
+                                    onclick="openReelModal(event)">
+                                    Reel <i class="fas fa-play"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -980,6 +998,32 @@
             document.body.style.setProperty('--my', (e.clientY / window.innerHeight * 100) + '%');
         });
     </script>
+    <script>
+        function openReelModal(e) {
+            e.preventDefault();
+            var m = document.getElementById('reel-modal');
+            var v = document.getElementById('reel-video');
+            m.classList.add('open');
+            if (v.paused) { v.play().catch(function(){}); }
+        }
+        function closeReelModal() {
+            var m = document.getElementById('reel-modal');
+            var v = document.getElementById('reel-video');
+            m.classList.remove('open');
+            if (!v.paused) { v.pause(); }
+        }
+        document.addEventListener('keydown', function(ev) {
+            if (ev.key === 'Escape') { closeReelModal(); }
+        });
+    </script>
+
+    <!-- Sumeru reel modal -->
+    <div id="reel-modal" role="dialog" aria-modal="true" aria-label="Sumeru launch reel">
+        <button type="button" class="reel-close" aria-label="Close reel" onclick="closeReelModal()">&times;</button>
+        <video id="reel-video" controls preload="none" playsinline poster="./sumeru-reel-poster.jpg">
+            <source src="./sumeru-reel.mp4" type="video/mp4">
+        </video>
+    </div>
 </body>
 
 </html>
